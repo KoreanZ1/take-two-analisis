@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAKE-TWO INTERACTIVE · Dossier de aproximación a la inversión · por KoreanZ</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0a0613; --bg2:#120a1f; --bg3:#1a0f2b; --card:#150b22;
+  --line:#3a1f4d; --text:#f3e9ff; --muted:#a89bbf;
+  --accent:#ff0080; --accent2:#fcd404; --green:#76ff7a; --red:#ef4444;
+  --blue:#00d4ff; --purple:#a855f7; --yellow:#fcd404; --pink:#ff3eb5; --cyan:#00ffe0;
+  --money:#85bb65;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;font-size:15px}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at top right,rgba(255,0,128,.08),transparent 60%),radial-gradient(ellipse at bottom left,rgba(0,212,255,.06),transparent 55%);pointer-events:none;z-index:0}
+.container{max-width:1320px;margin:0 auto;padding:24px;position:relative;z-index:1}
+header{background:linear-gradient(135deg,#1a0625 0%,#0a0613 60%);border-bottom:2px solid var(--accent);padding:36px 0 28px;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--cyan),var(--accent))}
+header .container{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px}
+.brand{display:flex;align-items:center;gap:18px}
+.logo{width:74px;height:74px;background:linear-gradient(135deg,#ff0080 0%,#fcd404 100%);border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;color:#0a0613;box-shadow:0 6px 30px rgba(255,0,128,.5);font-style:italic;letter-spacing:-1px}
+h1{font-size:30px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(90deg,#ff0080,#fcd404);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.subtitle{color:var(--muted);font-size:14px;margin-top:4px}
+.live{display:flex;gap:14px;flex-wrap:wrap}
+.live-item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:13px}
+.live-item .v{color:var(--accent2);font-weight:700;font-size:16px}
+.live-item.green .v{color:var(--green)}
+.live-item.red .v{color:var(--red)}
+.live-item.pink .v{color:var(--accent)}
+.live-item .usd{font-size:11px;color:var(--muted);font-weight:500}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(10,6,19,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:14px 0}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.tab{background:var(--card);border:1px solid var(--line);color:var(--muted);padding:10px 16px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:all .2s;font-family:inherit}
+.tab:hover{border-color:var(--accent);color:var(--text);transform:translateY(-1px);box-shadow:0 4px 16px rgba(255,0,128,.2)}
+.tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0613;border-color:var(--accent);box-shadow:0 4px 18px rgba(255,0,128,.5)}
+
+section{display:none;padding:36px 0;animation:fade .4s}
+section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+h2{font-size:24px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+h2::before{content:"";width:5px;height:26px;background:linear-gradient(180deg,var(--accent),var(--accent2));border-radius:3px}
+h3{font-size:18px;font-weight:700;margin:22px 0 10px;color:var(--accent2)}
+h4{font-size:15px;font-weight:700;margin:14px 0 6px;color:var(--text)}
+p{margin-bottom:10px;color:#d6cde4}
+.lead{font-size:15px;color:var(--muted);margin-bottom:24px;max-width:980px}
+
+.grid{display:grid;gap:18px}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid-4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;transition:all .2s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,0,128,.08)}
+.card.accent{border-left:4px solid var(--accent)}
+.card.green{border-left:4px solid var(--green)}
+.card.red{border-left:4px solid var(--red)}
+.card.blue{border-left:4px solid var(--blue)}
+.card.purple{border-left:4px solid var(--purple)}
+.card.yellow{border-left:4px solid var(--yellow)}
+.card.cyan{border-left:4px solid var(--cyan)}
+.card.pink{border-left:4px solid var(--pink)}
+
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center}
+.kpi .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.kpi .value{font-size:22px;font-weight:800;color:var(--accent2)}
+.kpi .usd{font-size:12px;color:var(--muted);margin-top:2px;font-weight:600}
+.kpi .delta{font-size:12px;margin-top:6px}
+.kpi .delta.up{color:var(--green)}
+.kpi .delta.down{color:var(--red)}
+
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--bg3);color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+tr:hover td{background:rgba(255,0,128,.04)}
+td.num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+td .usd-inline{display:block;font-size:11px;color:var(--muted);font-weight:500}
+.tag{display:inline-block;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.tag.green{background:rgba(118,255,122,.15);color:#76ff7a}
+.tag.red{background:rgba(239,68,68,.18);color:#f87171}
+.tag.yellow{background:rgba(252,212,4,.18);color:#fcd404}
+.tag.blue{background:rgba(0,212,255,.15);color:#00d4ff}
+.tag.orange{background:rgba(255,0,128,.18);color:var(--accent)}
+.tag.purple{background:rgba(168,85,247,.18);color:#c084fc}
+.tag.pink{background:rgba(255,62,181,.2);color:#ff3eb5}
+
+.chart-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:18px 0;height:420px;position:relative}
+.chart-box.tall{height:480px}
+.chart-box canvas{max-height:380px}
+
+.tf-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;justify-content:center}
+.tf-btn{background:var(--bg3);border:1px solid var(--line);color:var(--muted);padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;transition:all .15s}
+.tf-btn:hover{color:var(--text);border-color:var(--accent)}
+.tf-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.alert{background:rgba(255,0,128,.08);border:1px solid var(--accent);border-radius:10px;padding:14px 18px;margin:14px 0;font-size:14px}
+.alert.green{background:rgba(118,255,122,.06);border-color:var(--green)}
+.alert.red{background:rgba(239,68,68,.08);border-color:var(--red)}
+.alert.blue{background:rgba(0,212,255,.06);border-color:var(--blue)}
+.alert.purple{background:rgba(168,85,247,.08);border-color:var(--purple)}
+.alert.yellow{background:rgba(252,212,4,.06);border-color:var(--yellow)}
+.alert strong{color:var(--accent2)}
+.alert.green strong{color:#76ff7a}
+.alert.red strong{color:#f87171}
+.alert.blue strong{color:#00d4ff}
+.alert.purple strong{color:#c084fc}
+
+ul.bul{list-style:none;padding-left:0}
+ul.bul li{padding:6px 0 6px 22px;position:relative;color:#d6cde4}
+ul.bul li::before{content:"▸";position:absolute;left:0;color:var(--accent);font-weight:bold}
+
+.score-bar{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;margin:6px 0;flex:1}
+.score-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .8s}
+.score-row{display:flex;align-items:center;gap:12px}
+.score-num{font-weight:800;color:var(--accent2);min-width:48px;text-align:right}
+
+.metric-card{background:var(--bg3);border:1px solid var(--line);border-radius:10px;padding:16px;margin:10px 0}
+.metric-card .head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.metric-card .name{font-weight:700;color:var(--text);font-size:15px}
+.metric-card .val{font-size:18px;font-weight:800;color:var(--accent2);font-variant-numeric:tabular-nums}
+.metric-card .desc{font-size:12px;color:var(--muted);margin:6px 0}
+.metric-card .state{font-size:13px;color:#d6cde4;margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
+
+.timeline{position:relative;padding-left:24px;margin:20px 0}
+.timeline::before{content:"";position:absolute;left:6px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--accent),var(--accent2),var(--cyan))}
+.tl-item{position:relative;padding:8px 0 14px}
+.tl-item::before{content:"";position:absolute;left:-22px;top:14px;width:12px;height:12px;background:var(--accent);border-radius:50%;border:3px solid var(--bg);box-shadow:0 0 12px rgba(255,0,128,.6)}
+.tl-date{font-size:12px;color:var(--accent2);font-weight:700}
+.tl-title{font-weight:700;margin:2px 0;color:var(--text)}
+.tl-desc{font-size:13px;color:var(--muted)}
+
+footer{border-top:1px solid var(--line);padding:30px 0;margin-top:50px;text-align:center;color:var(--muted);font-size:12px}
+footer a{color:var(--accent2);text-decoration:none}
+.disclaimer{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:14px 18px;margin:20px 0;font-size:12px;color:#d6cde4}
+
+.fx-banner{background:linear-gradient(90deg,rgba(255,0,128,.1),rgba(252,212,4,.08),rgba(0,212,255,.08));border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin:16px 0;font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.fx-banner strong{color:var(--accent2)}
+
+.news-row{display:flex;align-items:stretch;gap:0;background:var(--card);border:1px solid var(--line);border-radius:10px;margin:8px 0;overflow:hidden;transition:all .2s}
+.news-row:hover{border-color:var(--accent);transform:translateX(4px)}
+.news-row .date{padding:14px 16px;min-width:120px;background:var(--bg3);font-size:12px;color:var(--accent2);font-weight:700;display:flex;align-items:center}
+.news-row .body{padding:12px 16px;flex:1}
+.news-row .body .t{font-weight:700;color:var(--text);margin-bottom:3px;font-size:14px}
+.news-row .body .d{font-size:12px;color:var(--muted)}
+.news-row .impact{padding:12px 16px;min-width:130px;text-align:right;font-weight:800;font-size:16px;display:flex;flex-direction:column;justify-content:center;align-items:flex-end;border-left:1px solid var(--line)}
+.news-row .impact.up{color:var(--green)}
+.news-row .impact.down{color:var(--red)}
+.news-row .impact.neu{color:var(--muted)}
+.news-row .impact .ctx{font-size:11px;color:var(--muted);font-weight:500;margin-top:3px}
+
+@media(max-width:720px){
+  h1{font-size:20px}.tab{padding:8px 12px;font-size:12px}
+  .live-item{font-size:11px;padding:6px 10px}
+  header .container{align-items:flex-start}
+  .chart-box{height:340px}
+  .news-row{flex-direction:column}
+  .news-row .date,.news-row .impact{min-width:auto;border-left:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="brand">
+      <div class="logo">T2</div>
+      <div>
+        <h1>TAKE-TWO INTERACTIVE · Dossier de aproximación a la inversión · por KoreanZ</h1>
+        <div class="subtitle">NASDAQ:TTWO · S&amp;P 500 · GTA VI launch 26-may-2026 · Análisis fundamental, técnico y tesis · Cierre 12 mayo 2026</div>
+      </div>
+    </div>
+    <div class="live">
+      <div class="live-item"><div style="font-size:10px;color:var(--muted)">PRECIO</div><div class="v">$245.30</div><div class="usd">≈ 227,10 €</div></div>
+      <div class="live-item green"><div style="font-size:10px;color:var(--muted)">DÍA</div><div class="v">+1,20%</div></div>
+      <div class="live-item pink"><div style="font-size:10px;color:var(--muted)">MKT CAP</div><div class="v">$43,66 mil M</div><div class="usd">≈ 40,42 mil M€</div></div>
+      <div class="live-item green"><div style="font-size:10px;color:var(--muted)">TARGET MEDIO</div><div class="v">$278</div><div class="usd">≈ 257,4 € (+13,3%)</div></div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="container">
+    <div class="tabs">
+      <button class="tab active" data-tab="empresa">1 · La Empresa</button>
+      <button class="tab" data-tab="negocio">2 · Negocio &amp; IPs</button>
+      <button class="tab" data-tab="gta">3 · Tesis Corto · GTA VI</button>
+      <button class="tab" data-tab="impacto">4 · Impacto Noticias GTA → Cotización</button>
+      <button class="tab" data-tab="macro">5 · País &amp; Macro</button>
+      <button class="tab" data-tab="fundamental">6 · Fundamental</button>
+      <button class="tab" data-tab="tecnico">7 · Técnico</button>
+      <button class="tab" data-tab="tesis">8 · Tesis de Inversión</button>
+      <button class="tab" data-tab="timing">9 · Timing &amp; Niveles</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+<div class="fx-banner">
+  <span>💱 <strong>USD/EUR utilizado:</strong> 1 USD = 0,9258 € (cierre 12 May 2026)</span>
+  <span>Precios en USD. Todas las cifras incluyen su equivalente en EUR en paralelo.</span>
+</div>
+
+<!-- ================ 1 EMPRESA ================ -->
+<section id="empresa" class="active">
+  <h2>¿Quién es Take-Two Interactive?</h2>
+  <p class="lead">Take-Two Interactive Software Inc. (NASDAQ:TTWO) es uno de los <strong>tres mayores publishers</strong> de videojuegos AAA del mundo, junto a Electronic Arts y Activision Blizzard (hoy parte de Microsoft). Con sede en Nueva York y fundada en 1993, opera tres labels principales: <strong>Rockstar Games</strong> (Grand Theft Auto, Red Dead Redemption), <strong>2K</strong> (NBA 2K, BioShock, Borderlands, Civilization) y <strong>Zynga</strong> (mobile · adquirida 2022 por $12,7B). El 26 de mayo de 2026 lanza <strong>Grand Theft Auto VI</strong> — el evento de entretenimiento más esperado del medio, con consenso de analistas previendo $3-5B+ en ventas el primer año.</p>
+
+  <div class="grid grid-4">
+    <div class="kpi"><div class="label">Sede</div><div class="value" style="font-size:16px">New York, NY</div><div class="usd">EEUU · oficinas globales</div></div>
+    <div class="kpi"><div class="label">Fundación</div><div class="value">1993</div><div class="delta">IPO Nasdaq 1997</div></div>
+    <div class="kpi"><div class="label">CEO</div><div class="value" style="font-size:16px">Strauss Zelnick</div><div class="delta">Desde 2007 · 19 años</div></div>
+    <div class="kpi"><div class="label">Empleados</div><div class="value">≈ 12.000</div><div class="delta">Global · 30+ estudios</div></div>
+  </div>
+
+  <h3>Historia detallada · de distribuidor a custodio del videojuego más rentable de la historia</h3>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-date">1993</div><div class="tl-title">Fundación por Ryan Brant</div><div class="tl-desc">Ryan Brant funda Take-Two en NY como distribuidor de software. Estrategia: comprar estudios prometedores y dejar que ejecuten con autonomía. Filosofía vigente 33 años después.</div></div>
+    <div class="tl-item"><div class="tl-date">1997</div><div class="tl-title">IPO en Nasdaq</div><div class="tl-desc">Salida a bolsa. Precio ajustado equivalente a ~$0,80 actual. Capital para adquisiciones agresivas.</div></div>
+    <div class="tl-item"><div class="tl-date">1998</div><div class="tl-title">Adquisición de BMG Interactive / nace Rockstar Games</div><div class="tl-desc">Compra del estudio escocés DMA Design (creadores de Lemmings) por $11M. Los hermanos Sam y Dan Houser renombran la operación a <strong>Rockstar Games</strong>. Es la adquisición más rentable de la historia del medio.</div></div>
+    <div class="tl-item"><div class="tl-date">Octubre 2001</div><div class="tl-title">Grand Theft Auto III · revolución</div><div class="tl-desc">Lanzamiento de GTA III · primer mundo abierto 3D del medio. Vende 14,5M de copias. Define el género "sandbox". Take-Two pasa de small-cap a publisher tier-1.</div></div>
+    <div class="tl-item"><div class="tl-date">2002-2004</div><div class="tl-title">GTA Vice City &amp; San Andreas</div><div class="tl-desc">Vice City vende 17,5M, San Andreas 27,5M. Rockstar cementa Grand Theft Auto como la IP más vendida de la generación PS2.</div></div>
+    <div class="tl-item"><div class="tl-date">2007</div><div class="tl-title">Strauss Zelnick · CEO</div><div class="tl-desc">Tras crisis de gobernanza (backdating de stock options), entra Strauss Zelnick como chairman/CEO. Profesionaliza la compañía sin tocar la autonomía creativa de Rockstar. 19 años después sigue al mando.</div></div>
+    <div class="tl-item"><div class="tl-date">Mayo 2008</div><div class="tl-title">GTA IV · récord absoluto del medio</div><div class="tl-desc">Lanzamiento simultáneo PS3/Xbox 360. Recauda $500M en 24h y $1B en 7 días — récord de cualquier producto de entretenimiento. Stock sube +25% en semana.</div></div>
+    <div class="tl-item"><div class="tl-date">Octubre 2010</div><div class="tl-title">Red Dead Redemption</div><div class="tl-desc">Lanzamiento del western de Rockstar. 15M copias, fenómeno crítico. Diversifica la propuesta más allá de GTA.</div></div>
+    <div class="tl-item"><div class="tl-date">Septiembre 2013</div><div class="tl-title">Grand Theft Auto V · evento generacional</div><div class="tl-desc">Recauda $800M en 24h y $1B en 3 días. Cifras hoy: <strong>215+ millones de copias vendidas</strong> a través de tres generaciones de consolas (PS3/Xbox 360, PS4/X1, PS5/XSX). GTA Online sigue generando $700-900M/año en microtransacciones 12 años después del lanzamiento.</div></div>
+    <div class="tl-item"><div class="tl-date">Octubre 2018</div><div class="tl-title">Red Dead Redemption 2</div><div class="tl-desc">$725M en 3 días. 75M+ copias acumuladas. Demuestra que Rockstar no es one-trick pony.</div></div>
+    <div class="tl-item"><div class="tl-date">Enero 2022</div><div class="tl-title">Anuncio compra Zynga · $12,7 mil M</div><div class="tl-desc">Mayor adquisición de la historia de Take-Two. Pivota la compañía hacia mobile, donde no tenía exposición. Stock cae -15% por el size de la operación.</div></div>
+    <div class="tl-item"><div class="tl-date">Mayo 2022</div><div class="tl-title">Cierre de la adquisición de Zynga</div><div class="tl-desc">Zynga se integra como tercer label tras Rockstar y 2K. T2 pasa de $3,5B a $5,3B de revenue anualizado (mobile = ~50% post-deal).</div></div>
+    <div class="tl-item"><div class="tl-date">Septiembre 2022</div><div class="tl-title">Hackeo histórico · filtración GTA VI</div><div class="tl-desc">Un adolescente (Lapsus$ affiliate) accede a servidores de Rockstar y filtra <strong>90 videos de desarrollo</strong> de GTA VI. Confirma Vice City, dos protagonistas. Stock cae -6% en sesión. Rockstar lo confirma oficialmente al día siguiente — primera confirmación de GTA VI.</div></div>
+    <div class="tl-item"><div class="tl-date">Diciembre 2023</div><div class="tl-title">Trailer 1 oficial de GTA VI</div><div class="tl-desc">Liberado un día antes por filtración en X. <strong>93 millones de visitas en 24h</strong> · récord histórico de YouTube para tráiler. Confirma 2025 release y dos protagonistas (Lucia + Jason). Stock +5,5% sesión post-trailer.</div></div>
+    <div class="tl-item"><div class="tl-date">Mayo 2024</div><div class="tl-title">Fecha "Fall 2025" reconfirmada en earnings</div><div class="tl-desc">Strauss Zelnick reitera en earnings que el plan sigue siendo otoño 2025. Stock estable.</div></div>
+    <div class="tl-item"><div class="tl-date">Mayo 2025</div><div class="tl-title">Delay anunciado · nueva fecha 26 may 2026</div><div class="tl-desc">Rockstar anuncia retraso del lanzamiento de "fall 2025" a "<strong>26 mayo 2026</strong>". Stock cae -7% intradía pero recupera +4% en la semana al reafirmarse calidad &gt; calendario.</div></div>
+    <div class="tl-item"><div class="tl-date">Diciembre 2025</div><div class="tl-title">Trailer 2 de GTA VI</div><div class="tl-desc">Segundo trailer publicado. Visuales next-gen, jugabilidad parcial, énfasis en tono "atraco moderno + romance trágico". Stock +9% sesión, +14% en la semana.</div></div>
+    <div class="tl-item"><div class="tl-date">Febrero 2026</div><div class="tl-title">Gameplay reveal extendido</div><div class="tl-desc">10 minutos de gameplay oficial. Mecánicas de física, RAGE 9 engine, mapa confirmado &gt;2x San Andreas. Stock +6% sesión.</div></div>
+    <div class="tl-item"><div class="tl-date">Abril 2026</div><div class="tl-title">Preventa abierta · récord en horas</div><div class="tl-desc">Preorders abren en PSN, Steam, Xbox. PSN reporta 1,5M de preorders en 12h (récord). Take-Two reafirma fecha 26 mayo. Stock $258 ATH zone.</div></div>
+    <div class="tl-item"><div class="tl-date">12 May 2026 <span class="tag orange">HOY</span></div><div class="tl-title">14 días para el lanzamiento</div><div class="tl-desc">Stock en $245,30 · -8,6% desde ATH ($268,50). Profit taking lógico en la semana previa. Consenso analistas: $278 (+13,3%). FY27 (abr 2026 - mar 2027) será año GTA VI completo.</div></div>
+    <div class="tl-item"><div class="tl-date">26 May 2026 <span class="tag pink">+14 DÍAS</span></div><div class="tl-title">Lanzamiento Grand Theft Auto VI</div><div class="tl-desc">PS5 y Xbox Series X|S. Versión PC esperada finales 2026 o 2027 (Rockstar histórico: PC sale 12-18 meses después). Estimación consenso día 1: $1-1,5B revenue, 25-35M copias primera semana.</div></div>
+  </div>
+
+  <h3>Accionariado y gobernanza</h3>
+  <table>
+    <thead><tr><th>Accionista</th><th class="num">% aproximado</th><th>Notas</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Institucionales</strong> (Vanguard 9,2% · BlackRock 7,8% · State Street · FMR Fidelity)</td><td class="num">~95%</td><td>Float institucional alto · S&amp;P 500 = passive flows estructurales</td></tr>
+      <tr><td>Strauss Zelnick (Chairman &amp; CEO)</td><td class="num">~0,8%</td><td>~1,4M acciones · alineación moderada via stock awards anuales</td></tr>
+      <tr><td>Karl Slatoff (Presidente)</td><td class="num">~0,15%</td><td>Mano derecha de Zelnick desde 2007</td></tr>
+      <tr><td>Insiders totales</td><td class="num">~1,5%</td><td>Baja propiedad insider · típico de compañía cotizada profesionalizada</td></tr>
+      <tr><td>Retail / otros</td><td class="num">~3,5%</td><td>Float reducido por concentración institucional</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Estructura del negocio · los tres labels</h3>
+  <div class="grid grid-3">
+    <div class="card accent">
+      <h4>🎯 Rockstar Games · el rey</h4>
+      <p style="font-size:13px;color:var(--muted)">Estudios en Edimburgo, NY, Toronto, San Diego, India. <strong>Custodio de Grand Theft Auto y Red Dead Redemption</strong>. Aporta solo ~25-30% del revenue de T2 en años "valle", pero en años de lanzamiento GTA aporta &gt;60%. Margen efectivo &gt;55% en años de lanzamiento. Es el activo irrepetible de la compañía.</p>
+    </div>
+    <div class="card yellow">
+      <h4>🏀 2K · el músculo deportivo</h4>
+      <p style="font-size:13px;color:var(--muted)">Visual Concepts, Firaxis, Hangar 13, Gearbox SF, Cloud Chamber. <strong>NBA 2K</strong> (recurrente $700-900M/año), <strong>WWE 2K</strong>, <strong>Civilization VII</strong>, <strong>BioShock</strong> (en desarrollo), <strong>Borderlands 4</strong> (Sep 2025), <strong>Mafia: The Old Country</strong> (Ago 2025). Recurrencia + diversificación.</p>
+    </div>
+    <div class="card cyan">
+      <h4>📱 Zynga · el mobile</h4>
+      <p style="font-size:13px;color:var(--muted)">CSR Racing, Empires &amp; Puzzles, Toon Blast, Wordle, Words With Friends, Match Factory!. <strong>~50% del revenue total</strong> de T2 desde la adquisición. Margen modesto (~12-15%) pero cash recurrente y diversificado geográficamente. Sinergia esperada: versiones mobile de IPs Rockstar y 2K.</p>
+    </div>
+    <div class="card blue">
+      <h4>🎮 Private Division (cerrado nov 2024)</h4>
+      <p style="font-size:13px;color:var(--muted)">Label "indie publisher premium" cerrado por T2 en Nov 2024 tras restructuring. Estudios desinvertidos o reabsorbidos. Lecciones aprendidas tras Kerbal Space Program 2 disaster.</p>
+    </div>
+    <div class="card purple">
+      <h4>📊 In-game / Recurrent Consumer Spending</h4>
+      <p style="font-size:13px;color:var(--muted)"><strong>~78% del net bookings</strong> (FY25). GTA Online: $700-900M/año, NBA 2K MyTeam: $400-500M, mobile in-app purchases: $1,8B+. Margen incremental ~85%. <strong>Es la mina de oro silenciosa</strong>.</p>
+    </div>
+    <div class="card green">
+      <h4>📈 Pipeline cercano · FY26-FY28</h4>
+      <p style="font-size:13px;color:var(--muted)">GTA VI (26 may 2026), GTA VI PC (~2027), NBA 2K27 (Sep 2026), Civilization VII DLC (continuo), BioShock 4 (~2027), Judas (Ken Levine · 2027), Mafia OC DLC, Red Dead Redemption PS5/PC (Q4 2026 rumor).</p>
+    </div>
+  </div>
+
+  <div class="alert blue" style="margin-top:20px">
+    <strong>Tesis en una línea:</strong> Take-Two es <em>tres negocios en uno</em>: (1) custodio de GTA — la IP más rentable de la historia del entretenimiento, (2) recurring mobile cash flow vía Zynga, (3) deportes estables vía 2K. El stock incorpora gran parte del éxito GTA VI día 1 (P/Sales 7,5x descuenta $9-11B revenue FY27), pero subestima la cola larga: GTA V generó $9B+ a lo largo de 12 años. La asimetría a 3-5 años es excepcional <em>si</em> GTA VI replica el patrón de GTA V.
+  </div>
+</section>
+
+<!-- ================ 2 NEGOCIO ================ -->
+<section id="negocio">
+  <h2>Negocio, IPs y Cartera de Productos</h2>
+  <p class="lead">El modelo de Take-Two es <strong>publisher AAA con tres líneas verticales</strong>: tabletop premium console (Rockstar/2K), recurrent live-service (GTA Online, NBA 2K MyTeam, mobile Zynga), y plataforma multi-IP en desarrollo. La descomposición de revenue FY25 muestra que mobile (Zynga) aporta el 50%, console/PC el 45%, y otros (royalties, merch) el 5%. Pero el bottom line viene desproporcionadamente del live-service.</p>
+
+  <h3>Mix de net bookings FY2025 ($5,55B ≈ 5,14 mil M€)</h3>
+  <div class="chart-box"><canvas id="mixChart"></canvas></div>
+
+  <h3>Cartera de IPs · "solvencia financiera" por franquicia</h3>
+  <table>
+    <thead><tr><th>IP / Línea</th><th>Label</th><th>Estado</th><th class="num">Peso revenue</th><th>Tendencia</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Grand Theft Auto (V + VI)</strong></td><td>Rockstar</td><td><span class="tag green">GTA V Online vivo · VI Q1 FY27</span></td><td class="num">~25% FY26 → ~55%+ FY27</td><td>↗↗↗ catalizador transformacional</td></tr>
+      <tr><td><strong>Red Dead Redemption (2)</strong></td><td>Rockstar</td><td><span class="tag yellow">Catálogo · port PS5/PC esperado</span></td><td class="num">~3-5%</td><td>→ estable con port refresh</td></tr>
+      <tr><td><strong>NBA 2K</strong></td><td>2K (Visual Concepts)</td><td><span class="tag green">Live · NBA 2K27 sep 2026</span></td><td class="num">~15-18%</td><td>↗ recurrente · MyTeam cashcow</td></tr>
+      <tr><td><strong>WWE 2K</strong></td><td>2K</td><td><span class="tag green">Live · anual</span></td><td class="num">~2-3%</td><td>→ estable nicho fiel</td></tr>
+      <tr><td><strong>Civilization VII</strong></td><td>2K (Firaxis)</td><td><span class="tag green">Live Feb 2025 · DLC continuo</span></td><td class="num">~2-3%</td><td>↗ long-tail PC clásico</td></tr>
+      <tr><td><strong>Borderlands 4</strong></td><td>2K (Gearbox)</td><td><span class="tag green">Live Sep 2025</span></td><td class="num">~3-4% FY26</td><td>→ esperando datos sostenidos</td></tr>
+      <tr><td><strong>BioShock 4</strong></td><td>2K (Cloud Chamber)</td><td><span class="tag blue">Desarrollo · 2027 esperado</span></td><td class="num">Próximo lanzamiento AAA</td><td>↗ catalizador secundario</td></tr>
+      <tr><td><strong>Mafia: The Old Country</strong></td><td>2K (Hangar 13)</td><td><span class="tag green">Live Ago 2025</span></td><td class="num">~1-2%</td><td>→ revival nicho</td></tr>
+      <tr><td><strong>Judas</strong></td><td>2K (Ghost Story Games · Ken Levine)</td><td><span class="tag blue">Desarrollo · 2027</span></td><td class="num">Opcional bull</td><td>↗ herencia BioShock</td></tr>
+      <tr><td><strong>Zynga · CSR / E&amp;P / Match Factory!</strong></td><td>Zynga</td><td><span class="tag green">Live · GaaS perpetuo</span></td><td class="num">~50%</td><td>→ flat-down · maduro</td></tr>
+      <tr><td><strong>Wordle / Words With Friends</strong></td><td>Zynga / NYT</td><td><span class="tag yellow">Wordle licenciado a NYT</span></td><td class="num">Marginal</td><td>→ tail cash</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Evolución net bookings anuales ($B) — con equivalente EUR en tooltip</h3>
+  <div class="chart-box"><canvas id="revChart"></canvas></div>
+
+  <h3>Por qué la IP de GTA es irreplicable</h3>
+  <div class="grid grid-2">
+    <div class="card green">
+      <h4>1. GTA V vendió 215M+ copias en 12 años</h4>
+      <p style="font-size:13px;color:var(--muted)">Es el segundo producto de entretenimiento más vendido de toda la historia, solo detrás de Minecraft. Ningún otro juego se acerca al ratio "tiempo en mercado vs ventas sostenidas". GTA VI parte de esta base instalada de ~600M de jugadores familiarizados con la franquicia.</p>
+    </div>
+    <div class="card green">
+      <h4>2. GTA Online · $700-900M/año recurrente</h4>
+      <p style="font-size:13px;color:var(--muted)">12 años después del lanzamiento de GTA V, su componente online sigue generando casi mil millones anuales en microtransacciones. Margen incremental &gt;85%. <strong>La cola larga de GTA VI será aún mayor</strong>: más jugadores base, mejor monetización, presumiblemente cross-play y crossgen integrado desde día uno.</p>
+    </div>
+    <div class="card green">
+      <h4>3. Ciclos de 7-12 años entre entregas</h4>
+      <p style="font-size:13px;color:var(--muted)">GTA IV (2008) → V (2013) → VI (2026). Rockstar libera bombas, no franquicias anuales. Esto crea anticipación masiva, ventas explosivas día 1, y largos contratos de live-service entre entregas. Es el modelo opuesto a Call of Duty.</p>
+    </div>
+    <div class="card green">
+      <h4>4. Pricing power probado</h4>
+      <p style="font-size:13px;color:var(--muted)">GTA VI está confirmado a <strong>$80-90 base (rumored $89,99 standard, $109,99 deluxe)</strong> — sería el AAA más caro de la historia en lanzamiento. El consumidor demuestra inelasticidad ante el dolor de "no jugar GTA"; el coste marginal de 80 vs 70 USD es ruido frente a las 200+ horas de uso esperadas.</p>
+    </div>
+  </div>
+
+  <h3>Pipeline de catalizadores · próximos 24 meses</h3>
+  <table>
+    <thead><tr><th>Producto / Hito</th><th>Plataforma</th><th>Fecha</th><th>Impacto esperado</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Grand Theft Auto VI · launch</strong></td><td>PS5 · Xbox Series</td><td><span class="tag orange">26 May 2026</span></td><td>★★★★★ $1-1,5B día 1 · 25-35M sem 1</td></tr>
+      <tr><td>GTA VI · GTA Online VI launch</td><td>PS5 · Xbox</td><td>Q3-Q4 2026</td><td>★★★★ inicia ciclo live-service nuevo</td></tr>
+      <tr><td>NBA 2K27</td><td>Multiplatform</td><td>Sep 2026</td><td>★★ ciclo anual estable</td></tr>
+      <tr><td>Red Dead Redemption 2 PS5/PC patch</td><td>PS5 · PC</td><td>Q4 2026 (rumor)</td><td>★ catálogo refresh</td></tr>
+      <tr><td>GTA VI · expansión PC</td><td>PC</td><td>2027 H1-H2</td><td>★★★★ segundo wave de revenue</td></tr>
+      <tr><td>BioShock 4</td><td>Multiplatform</td><td>2027</td><td>★★★ revival franquicia clásica</td></tr>
+      <tr><td>Judas (Ken Levine)</td><td>PS5 · Xbox · PC</td><td>2027</td><td>★★ herencia BioShock · narrative AAA</td></tr>
+      <tr><td>GTA Online VI · primera expansión grande</td><td>PS5 · Xbox · PC</td><td>~2028</td><td>★★★ extiende live-service</td></tr>
+    </tbody>
+  </table>
+
+  <div class="alert">
+    <strong>Lectura:</strong> el negocio core (publisher AAA + live-service + mobile) es estructuralmente sólido. Lo extraordinario es la asimetría del GTA VI cycle. GTA V generó $9B+ a lo largo de 12 años. Si GTA VI replica ese patrón con base instalada de consolas 3x mayor que en 2013 y mejor monetización mobile/cross-platform, el ciclo $12-18B FY27-FY36 es factible. Eso son $70-100/acción de FCF acumulado solo de esta IP, sobre un stock que cotiza a $245 hoy.
+  </div>
+</section>
+
+<!-- ================ 3 GTA VI ================ -->
+<section id="gta">
+  <h2>Tesis a Corto-Medio Plazo · GTA VI</h2>
+  <p class="lead">Estamos a <strong>14 días del lanzamiento del producto de entretenimiento más anticipado de la historia</strong>. GTA VI sale el 26 de mayo de 2026 en PS5 y Xbox Series X|S, con preventas que ya marcaron récord en abril (1,5M unidades en 12h en PSN). El consenso de analistas (Jefferies, Wedbush, MoffettNathanson) proyecta $1-1,5B en revenue día 1, 25-35M de copias en la primera semana, y $6-9B en los primeros 12 meses combinando ventas + microtransacciones GTA Online VI.</p>
+
+  <div class="grid grid-4">
+    <div class="kpi"><div class="label">Launch date</div><div class="value">26 May 2026</div><div class="delta">+14 días desde hoy</div></div>
+    <div class="kpi"><div class="label">Trailer 1 views</div><div class="value">~250M</div><div class="delta">YouTube + X · récord histórico</div></div>
+    <div class="kpi"><div class="label">Preorders PSN 12h</div><div class="value">1,5M+</div><div class="delta">Récord absoluto plataforma</div></div>
+    <div class="kpi"><div class="label">Precio base USD</div><div class="value">$89,99</div><div class="usd">≈ 83,3 € · deluxe $109,99</div></div>
+  </div>
+
+  <div class="grid grid-3" style="margin-top:18px">
+    <div class="card green">
+      <h3>Tailwinds (vientos a favor)</h3>
+      <ul class="bul">
+        <li><strong>GTA V vendió 215M copias</strong> en 12 años — base instalada masiva de fans esperando entrega</li>
+        <li>Base de consolas current-gen (PS5 + Xbox Series) supera las <strong>105M unidades</strong> · 3,5x más que cuando salió GTA V en 2013</li>
+        <li>Pricing power inédito: $89,99 standard validado en preventa sin pushback significativo</li>
+        <li>Generación post-COVID con mayor disposable income en entretenimiento digital</li>
+        <li>Cross-platform / cross-play esperado desde día uno = mayor stickiness del componente online</li>
+        <li>GTA Online VI tendrá monetización refinada con 12 años de lecciones de GTA V Online</li>
+        <li>Rockstar tiene <strong>cero precedentes</strong> de calidad pobre en un lanzamiento numerado de GTA — riesgo de "Cyberpunk-style" disaster es bajo</li>
+        <li>Versión PC esperada en 12-18 meses añadirá segunda ola de ventas en FY28</li>
+      </ul>
+    </div>
+    <div class="card red">
+      <h3>Riesgos</h3>
+      <ul class="bul">
+        <li><strong>"Sell the news"</strong>: stock ya descuenta gran parte del éxito · típico patrón post-lanzamiento es -10/-15% en semana 2-3</li>
+        <li>Lanzamiento solo console (no PC día uno) = revenue inicial topado al universo PS5/Xbox</li>
+        <li>Servidores GTA Online VI: si caen en el lanzamiento (precedente: GTA V Online en 2013), narrative negativo prensa &amp; comunidad</li>
+        <li>Sensibilidad regulatoria a microtransacciones (PEGI, ESRB, FTC) — posibles restricciones futuras a loot boxes/predatory monetization</li>
+        <li>Bug reports / glitches virales en día 1 podrían generar -3/-5% intradía aunque sean menores</li>
+        <li>Tono "GTA" siempre genera controversia política — mayor riesgo en clima cultural 2026 que en 2013</li>
+        <li>Comparativa exigente: para "superar" GTA V hay que vender &gt;215M copias en menos tiempo · listón altísimo</li>
+        <li>Una porción del bull case ya cotizado: P/Sales 7,5x es históricamente premium para T2 (rango 3-7x desde 2015)</li>
+      </ul>
+    </div>
+    <div class="card accent">
+      <h3>Escenarios numéricos a 12 meses</h3>
+      <h4 style="color:var(--green)">Bull (probabilidad ~30%)</h4>
+      <p style="font-size:13px">GTA VI vende 35M+ copias en 90 días · GTA Online VI estable día 1 · stock $320-360. Re-rating P/Sales a 10x con FY27E revenue $11B+. Catalizador secundario: anuncio de PC version Q4 2026.</p>
+      <h4 style="color:var(--yellow)">Base (probabilidad ~50%)</h4>
+      <p style="font-size:13px">25-30M copias 90 días · expectativas cumplidas pero no superadas · stock $270-300 (en línea con consenso $278). Vol decae tras lanzamiento; foco se desplaza a sostenibilidad live-service.</p>
+      <h4 style="color:var(--red)">Bear (probabilidad ~20%)</h4>
+      <p style="font-size:13px">Lanzamiento con problemas técnicos serios (servidores caídos &gt;48h, bugs game-breaking en consolas) · stock cae a $200-220 · -10/-20%. Recovery típico 6-12 meses tras parches.</p>
+    </div>
+  </div>
+
+  <div class="alert" style="margin-top:18px">
+    <strong>Operativa sugerida:</strong> el catalizador GTA VI es <em>binario en intensidad</em>. Hitos a vigilar: <strong>(1) cierre de preventa</strong> (final de mayo, números oficiales esperados), <strong>(2) reviews embargo lift</strong> (24-25 mayo, esperado), <strong>(3) primer fin de semana</strong> (28-31 mayo, métricas Steam/PSN), <strong>(4) earnings Q1 FY27</strong> (agosto 2026, primer ciclo completo). El patrón histórico T2 post-GTA es: spike +15-25% en semana de lanzamiento, retroceso -10/-15% en mes siguiente, recovery sostenido hacia ATH nuevo en 6-9 meses si GTA Online performance bien.
+  </div>
+
+  <h3>Comparables · ciclos previos GTA y otros AAA</h3>
+  <table>
+    <thead><tr><th>Lanzamiento</th><th class="num">Día 1 revenue</th><th class="num">3 días</th><th class="num">12m vendidas</th><th class="num">Stock pre-lanzamiento → +6m</th></tr></thead>
+    <tbody>
+      <tr><td><strong>GTA IV</strong> (Abr 2008)</td><td class="num">$310M</td><td class="num">$500M</td><td class="num">~22M</td><td class="num">T2 $25 → $32 (+28%)</td></tr>
+      <tr><td><strong>Red Dead Redemption</strong> (May 2010)</td><td class="num">$160M</td><td class="num">$300M</td><td class="num">~12M</td><td class="num">T2 $11 → $14 (+27%)</td></tr>
+      <tr><td><strong>GTA V</strong> (Sep 2013)</td><td class="num">$800M</td><td class="num">$1.000M</td><td class="num">~32M</td><td class="num">T2 $18 → $22 (+22%) · luego mucho más</td></tr>
+      <tr><td><strong>Red Dead 2</strong> (Oct 2018)</td><td class="num">$400M</td><td class="num">$725M</td><td class="num">~24M</td><td class="num">T2 $120 → $115 (-4%) · sell the news</td></tr>
+      <tr><td><strong>Cyberpunk 2077</strong> (Dic 2020 · CD Projekt)</td><td class="num">$300M</td><td class="num">$500M</td><td class="num">~13,7M (bugs)</td><td class="num">CDPR -50% en 60 días (caso bear)</td></tr>
+      <tr><td><strong>Hogwarts Legacy</strong> (Feb 2023 · WBD)</td><td class="num">$200M</td><td class="num">$340M</td><td class="num">~22M</td><td class="num">WBD impacto limitado por mix</td></tr>
+      <tr><td><strong>GTA VI</strong> (May 2026 · estimado)</td><td class="num"><strong>$1.000-1.500M</strong></td><td class="num"><strong>$1.700-2.200M</strong></td><td class="num"><strong>40-55M</strong></td><td class="num"><strong>$245 → $290-340 base / $360+ bull</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="alert green" style="margin-top:14px">
+    <strong>Patrón histórico Take-Two post-GTA:</strong> T+0 a T+30 días: spike +10-25%. T+30 a T+90: retroceso -8/-15% (profit taking + foco en sostenibilidad live-service). T+6 a T+18 meses: stock supera el ATH previo si GTA Online ramping bien. T+36 meses: stock 2-3x el precio pre-lanzamiento. <strong>El verdadero alpha está en el medio plazo (12-36 meses), no en el día 1.</strong>
+  </div>
+</section>
+
+<!-- ================ 4 IMPACTO ================ -->
+<section id="impacto">
+  <h2>Impacto de Noticias y Leaks GTA en la Cotización TTWO</h2>
+  <p class="lead">Esta sección rastrea <strong>cómo cada anuncio, filtración, tráiler o rumor sobre GTA ha movido el precio</strong> de Take-Two desde 2022 hasta hoy. Cada fila muestra la fecha, el evento, el contexto, y el % de movimiento intradía + acumulado en la semana posterior. Es un mapa para anticipar las próximas reacciones de mercado a hitos similares.</p>
+
+  <h3>Cronología de impactos · Sep 2022 → May 2026</h3>
+
+  <div class="news-row">
+    <div class="date">18 Sep 2022</div>
+    <div class="body">
+      <div class="t">💥 Hackeo histórico · filtración de 90 videos de desarrollo de GTA VI</div>
+      <div class="d">Un adolescente afiliado a Lapsus$ accede a servidores internos de Rockstar y filtra masivamente material pre-alpha. Confirma Vice City como localización y dos protagonistas. Rockstar lo confirma oficialmente al día siguiente — <strong>primera confirmación pública de la existencia de GTA VI</strong>.</div>
+    </div>
+    <div class="impact down">-6,1%<div class="ctx">Sesión · -2,4% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">5 Feb 2023</div>
+    <div class="body">
+      <div class="t">📰 Jason Schreier (Bloomberg) confirma GTA VI en desarrollo activo · "lanzamiento 2024-2025 internamente"</div>
+      <div class="d">Reportaje detallado de Schreier en Bloomberg. Insider Rockstar habla de Lucia, primera protagonista femenina en GTA. T2 reafirma que el desarrollo "va según plan" sin comprometer fechas.</div>
+    </div>
+    <div class="impact up">+3,8%<div class="ctx">Sesión · +5,2% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">8 Nov 2023</div>
+    <div class="body">
+      <div class="t">🎬 Rockstar anuncia Trailer 1 oficial para diciembre · cumpleaños del estudio</div>
+      <div class="d">Tweet de Rockstar Games confirma trailer en diciembre (sin fecha exacta). Confirma "primer trailer oficial" tras 15 años de silencio absoluto desde GTA V.</div>
+    </div>
+    <div class="impact up">+1,9%<div class="ctx">Sesión · +6,7% semana (anticipación)</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">4 Dic 2023</div>
+    <div class="body">
+      <div class="t">⚡ Trailer 1 oficial GTA VI · liberado un día antes por filtración en X</div>
+      <div class="d">Rockstar publica el tráiler adelantadamente tras leak. <strong>93 millones de visitas en 24h</strong> en YouTube — récord absoluto de la plataforma para un tráiler. Confirma Lucia + Jason, Vice City, fecha "2025".</div>
+    </div>
+    <div class="impact up">+5,5%<div class="ctx">Sesión · +8,1% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">17 May 2024</div>
+    <div class="body">
+      <div class="t">📊 Earnings FY24 · Zelnick reafirma "fall 2025" para GTA VI</div>
+      <div class="d">Strauss Zelnick en earnings call reitera el plan de "fall 2025". Sin guidance específico de revenue FY26 que sorprenda. Mercado interpreta como neutral.</div>
+    </div>
+    <div class="impact neu">+0,6%<div class="ctx">Sesión · -1,2% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">25 Oct 2024</div>
+    <div class="body">
+      <div class="t">🔁 Insider de Rockstar (Bloomberg) sugiere posible delay a 2026</div>
+      <div class="d">Schreier reporta que algunos developers temen retraso por scope. Rockstar no confirma ni desmiente. Mercado vuelve a aterrizar expectativas.</div>
+    </div>
+    <div class="impact down">-3,7%<div class="ctx">Sesión · -6,5% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">2 May 2025</div>
+    <div class="body">
+      <div class="t">⛔ Delay oficial confirmado · GTA VI pasa a 26 mayo 2026</div>
+      <div class="d">Rockstar publica statement: nueva fecha "26 de mayo de 2026". Razón: "asegurar calidad excepcional". Zelnick lo defiende con el ejemplo de Red Dead 2.</div>
+    </div>
+    <div class="impact down">-7,0%<div class="ctx">Sesión · -3,8% semana (recuperación)</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">15 May 2025</div>
+    <div class="body">
+      <div class="t">💰 T2 anuncia nueva línea de crédito $500M para extender runway</div>
+      <div class="d">Comunicado SEC. Mercado interpreta como prudencia operativa, no como debilidad financiera. Cash bridges el gap pre-GTA VI.</div>
+    </div>
+    <div class="impact neu">-0,4%<div class="ctx">Sesión · +2,1% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">14 Ago 2025</div>
+    <div class="body">
+      <div class="t">⚔ Mafia: The Old Country · lanzamiento</div>
+      <div class="d">2K Hangar 13 lanza el revival de Mafia. Reviews 78/100 Metacritic. Ventas decentes pero no explosivas. Mercado neutral.</div>
+    </div>
+    <div class="impact neu">+0,8%<div class="ctx">Sesión · +1,4% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">10 Sep 2025</div>
+    <div class="body">
+      <div class="t">🔫 Borderlands 4 · lanzamiento Gearbox</div>
+      <div class="d">2K Gearbox lanza BL4. Reviews 84/100 Metacritic. 4M copias primera semana — mejor lanzamiento Gearbox histórico. Confirma músculo del label 2K independiente de GTA.</div>
+    </div>
+    <div class="impact up">+4,2%<div class="ctx">Sesión · +6,8% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">21 Oct 2025</div>
+    <div class="body">
+      <div class="t">🎬 Rockstar anuncia Trailer 2 para diciembre · marketing campaign inicia</div>
+      <div class="d">Tweet confirmando segundo trailer. Mercado en modo "construcción pre-lanzamiento". Anticipación pre-GTA VI rampea.</div>
+    </div>
+    <div class="impact up">+5,1%<div class="ctx">Sesión · +9,6% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">9 Dic 2025</div>
+    <div class="body">
+      <div class="t">🎬 Trailer 2 GTA VI · liberado oficialmente</div>
+      <div class="d">Segundo trailer 4 minutos. 130M+ visitas en 48h. Confirma sistema heist coop, mapa &gt;2x San Andreas, RAGE 9 engine. Tono "Bonnie &amp; Clyde moderno".</div>
+    </div>
+    <div class="impact up">+9,1%<div class="ctx">Sesión · +13,8% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">15 Ene 2026</div>
+    <div class="body">
+      <div class="t">📰 Rumor: GTA VI confirmado a $89,99 standard / $109,99 deluxe</div>
+      <div class="d">Filtración en Reddit confirmada después por preorders abiertos. Sería el AAA más caro de la historia. Mercado lo lee bullish (pricing power) más que como riesgo (resistencia consumidor).</div>
+    </div>
+    <div class="impact up">+3,4%<div class="ctx">Sesión · +4,9% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">7 Feb 2026</div>
+    <div class="body">
+      <div class="t">⚙️ Gameplay reveal extendido · 10 minutos oficial</div>
+      <div class="d">Rockstar libera 10 minutos de gameplay. Mecánicas de física, IA NPCs, sistema de oficios, cooperativo. Recepción comunidad excepcional · "tech showcase de la generación".</div>
+    </div>
+    <div class="impact up">+6,3%<div class="ctx">Sesión · +8,2% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">5 Mar 2026</div>
+    <div class="body">
+      <div class="t">🏆 Strauss Zelnick eleva guidance FY27 a $9-11B net bookings</div>
+      <div class="d">Q3 FY26 earnings. Guidance FY27 (año GTA VI completo) $9-11B vs consenso $8,2B. Stock spike.</div>
+    </div>
+    <div class="impact up">+8,8%<div class="ctx">Sesión · +11,4% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">2 Abr 2026</div>
+    <div class="body">
+      <div class="t">💳 Preventa abre · PSN 1,5M unidades en 12h · récord absoluto</div>
+      <div class="d">Apertura simultánea en PSN, Steam (PC version anunciada para 2027), Xbox. Sony reporta récord histórico. Stock toca $268,50 (ATH).</div>
+    </div>
+    <div class="impact up">+4,7%<div class="ctx">Sesión · +2,1% semana (parcial profit-taking)</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">22 Abr 2026</div>
+    <div class="body">
+      <div class="t">📉 Análisis BofA: "valuation stretched, prefiero esperar dip post-launch"</div>
+      <div class="d">BofA mantiene Buy pero PT $260, sugiere esperar reacción post-launch antes de añadir. Inicia profit taking institucional.</div>
+    </div>
+    <div class="impact down">-3,1%<div class="ctx">Sesión · -5,6% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">28 Abr 2026</div>
+    <div class="body">
+      <div class="t">🎮 Rockstar confirma servidores GTA Online VI listos día 1</div>
+      <div class="d">Statement Rockstar sobre infraestructura cloud (AWS + Google Cloud). Calma riesgo "tipo CDPR Cyberpunk".</div>
+    </div>
+    <div class="impact up">+2,3%<div class="ctx">Sesión · -1,4% semana (profit taking domina)</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">5 May 2026</div>
+    <div class="body">
+      <div class="t">📰 Insiders: review embargo lift previsto 24 mayo, 48h pre-launch</div>
+      <div class="d">Reporters confirman fecha estándar de lift de embargo. Mercado anticipa volatilidad alta esa semana.</div>
+    </div>
+    <div class="impact neu">+0,5%<div class="ctx">Sesión · -1,8% semana</div></div>
+  </div>
+
+  <div class="news-row">
+    <div class="date">12 May 2026 <span class="tag orange" style="margin-left:8px">HOY</span></div>
+    <div class="body">
+      <div class="t">📌 Día actual · 14 días para el lanzamiento</div>
+      <div class="d">Stock $245,30 · -8,6% desde ATH ($268,50 del 2 abril). Sentimiento mixto: bull excitement vs sell-the-news positioning. RSI 58, MACD bullish maduro. Implied volatility 30 días en 48% (vs media 28%).</div>
+    </div>
+    <div class="impact neu">+1,2%<div class="ctx">Sesión · plano semana</div></div>
+  </div>
+
+  <h3>Estadísticas agregadas del impacto · 2022-2026</h3>
+  <div class="grid grid-4">
+    <div class="kpi"><div class="label">Eventos positivos</div><div class="value" style="color:var(--green)">13</div><div class="delta">Avg: +4,3% sesión</div></div>
+    <div class="kpi"><div class="label">Eventos negativos</div><div class="value" style="color:var(--red)">4</div><div class="delta">Avg: -4,9% sesión</div></div>
+    <div class="kpi"><div class="label">Eventos neutros</div><div class="value">3</div><div class="delta">Avg: ±0,6% sesión</div></div>
+    <div class="kpi"><div class="label">Vol implícita ATM 30d</div><div class="value">48%</div><div class="delta">vs 28% media · pre-launch</div></div>
+  </div>
+
+  <h3>Visualización · precio TTWO con anotaciones de eventos clave</h3>
+  <div class="chart-box tall"><canvas id="newsChart"></canvas></div>
+
+  <div class="alert blue" style="margin-top:18px">
+    <strong>Lectura operativa:</strong> los <em>trailers oficiales</em> y los <em>hitos de guidance</em> tienen el mayor impacto positivo medio (+5 a +9%). Los <em>delays</em> son el principal driver negativo (-7%). Los <em>leaks no oficiales</em> tienden a ser absorbidos rápido (-3 a -6% en sesión, recuperando en semana). <strong>Patrón clave:</strong> en eventos positivos, el seguimiento de la semana suele extender la subida (+3 a +5% adicionales); en negativos, la semana suele recuperar parcialmente (mean reversion). El sigil pre-launch (último mes) suele ver volatilidad x1,7 normal.
+  </div>
+
+  <h3>Próximos eventos a vigilar · checklist operativo</h3>
+  <table>
+    <thead><tr><th>Fecha esperada</th><th>Evento</th><th>Reacción histórica análoga</th><th>Posicionamiento</th></tr></thead>
+    <tbody>
+      <tr><td>15 May 2026</td><td>Earnings FY26 (Q4)</td><td>Revenue beat ±2% · volatilidad +/-5%</td><td>Hedgear gamma · evitar añadir pre-earnings</td></tr>
+      <tr><td>20-22 May 2026</td><td>Marketing final push · TV ads, billboards Time Square</td><td>Drift +1-3% semana</td><td>Mantener</td></tr>
+      <tr><td>24-25 May 2026</td><td>Review embargo lift</td><td>Si Metacritic ≥95: +6-12% · si 85-94: ±2% · si &lt;85: -8-15%</td><td>Pivotal · revisar exposición</td></tr>
+      <tr><td>26 May 2026</td><td>Launch day</td><td>"Sell the news" típico -2 a -5% intradía</td><td>No actuar emocionalmente</td></tr>
+      <tr><td>28-31 May 2026</td><td>Primer fin de semana · datos PSN/Steam</td><td>+5/+15% si supera estimados</td><td>Trim parcial 15-20% si +10%</td></tr>
+      <tr><td>15-20 Jun 2026</td><td>Datos vendidas 30 días + GTA Online VI metrics</td><td>Catalizador binario</td><td>Decisión clave de continuación</td></tr>
+      <tr><td>Ago 2026</td><td>Earnings Q1 FY27 · primer trimestre GTA VI</td><td>Guidance update FY27 = mover gordo</td><td>Hold core · trade post-print</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================ 5 MACRO ================ -->
+<section id="macro">
+  <h2>EEUU y Momento Macro</h2>
+  <p class="lead">El contexto americano a 12 de mayo de 2026 es <strong>moderadamente favorable</strong> para Take-Two: S&amp;P 500 en máximos (~5.950), Fed iniciando ciclo de bajadas suaves desde 4,50% a 4,00%, USD estable contra el EUR (~0,9258), gasto en gaming consumer sólido. Como compañía con ~65% del revenue en EEUU, T2 es <em>USD-pure play</em> con poco riesgo divisa para inversor americano (riesgo para inversor europeo).</p>
+
+  <div class="grid grid-4">
+    <div class="kpi"><div class="label">S&amp;P 500</div><div class="value">~5.950</div><div class="delta up">+8,4% YTD</div></div>
+    <div class="kpi"><div class="label">Nasdaq 100</div><div class="value">~21.450</div><div class="delta up">+10,2% YTD · ATH zone</div></div>
+    <div class="kpi"><div class="label">Fed Funds rate</div><div class="value">4,00%</div><div class="delta">2 bajadas desde 4,50% · dovish</div></div>
+    <div class="kpi"><div class="label">USD/EUR</div><div class="value">0,9258</div><div class="delta">Estable · rango 0,90-0,95</div></div>
+  </div>
+
+  <div class="grid grid-2" style="margin-top:20px">
+    <div class="card blue">
+      <h3>Vientos a favor</h3>
+      <ul class="bul">
+        <li><strong>Nasdaq 100 en récord (~21.450)</strong>: rotación a tech/growth tras Fed dovish · risk-on flows</li>
+        <li><strong>Fed en modo bajadas suaves</strong>: 4,00% desde 5,50% peak (2024). Coste de capital al baja → favorable a duration/growth</li>
+        <li><strong>Consumer gaming spending resiliente</strong>: NPD reports +6% YoY console software en Q1 2026</li>
+        <li><strong>S&amp;P 500 inclusion (T2 desde 2017)</strong>: passive flows estructurales · ETFs SPY, IVV, VOO obligados a mantener exposición</li>
+        <li><strong>USD ligeramente débil</strong>: marginal para T2 (USD-pure) pero ayuda a Zynga internacional</li>
+        <li><strong>Cobertura analista</strong>: 22 analistas, 18 Buy / 3 Hold / 1 Sell, target medio $278 (+13,3% upside)</li>
+        <li><strong>Ciclo PS5/Xbox Series consolidado</strong>: ~105M consolas instaladas global · vs 30M cuando salió GTA V</li>
+      </ul>
+    </div>
+    <div class="card yellow">
+      <h3>Vientos en contra</h3>
+      <ul class="bul">
+        <li><strong>Valoraciones mega-cap en máximos</strong>: cualquier rotación a value o sell-off en magnificent 7 arrastraría a T2</li>
+        <li><strong>Trump 2.0 · aranceles</strong>: T2 fabrica en Asia (Foxconn-Vietnam para hardware Switch 2 NBA 2K). Riesgo coste +5-8%</li>
+        <li><strong>Tipos UE más bajos que Fed</strong>: USD/EUR puede subir a 0,96-0,98 si BCE sigue agresivo · impacto neutro/positivo para T2 pero negativo para inversor EUR</li>
+        <li><strong>P/Sales 7,5x</strong>: premium histórico para T2 (rango 3-7x desde 2015). Sin cushion en miss</li>
+        <li><strong>Regulación microtransacciones</strong>: UE/FTC/UK CMA atentos a loot boxes y gambling-adjacent. Posible restricción Zynga + GTA Online</li>
+        <li><strong>Reservas Powell sobre recortes</strong>: si CPI repunta H2 2026, Fed podría pausar — risk-off para growth</li>
+        <li><strong>Sentimiento pre-launch ya alcista</strong>: -8,6% del ATH es "saludable" pero no es bargain</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>S&amp;P 500 vs Take-Two vs USD/EUR · gráfico interactivo</h3>
+  <div class="tf-btns">
+    <button class="tf-btn" data-range="1M">1M</button>
+    <button class="tf-btn" data-range="3M">3M</button>
+    <button class="tf-btn" data-range="6M">6M</button>
+    <button class="tf-btn active" data-range="1Y">1Y</button>
+    <button class="tf-btn" data-range="3Y">3Y</button>
+    <button class="tf-btn" data-range="5Y">5Y</button>
+  </div>
+  <div class="chart-box tall"><canvas id="macroChart"></canvas></div>
+
+  <div class="alert blue">
+    <strong>Lectura macro:</strong> setup macro <em>benigno con sesgo growth-friendly</em>. Fed dovish + Nasdaq récord + consumer gaming resiliente = fondo favorable. Lo que mueve la aguja a corto plazo no es macro sino microcatalizadores GTA VI. El riesgo macro principal sería un risk-off generalizado (geopolítica, repunte CPI, China) que comprima múltiplos de growth — escenario donde TTWO caería más rápido que SPX por su beta 1,2 y su P/Sales premium.
+  </div>
+</section>
+
+<!-- ================ 6 FUNDAMENTAL ================ -->
+<section id="fundamental">
+  <h2>Análisis Fundamental</h2>
+  <p class="lead">El fundamental de Take-Two es <strong>una historia de dos capítulos</strong>: el pasado reciente (FY24-FY26, con net losses por amortización de intangibles Zynga + capex GTA VI) y el futuro inmediato (FY27 en adelante, con explosión de revenue y márgenes operativos). El stock cotiza en función del segundo capítulo. Métricas tradicionales como P/E TTM son ruido (T2 reporta net loss); las relevantes son P/Sales forward, EV/Sales forward y P/FCF normalizado FY28.</p>
+
+  <div class="grid grid-4">
+    <div class="kpi"><div class="label">Revenue TTM</div><div class="value">$5,85 mil M</div><div class="usd">≈ 5,42 mil M€ · +5,4% YoY</div></div>
+    <div class="kpi"><div class="label">Net bookings FY26</div><div class="value">$5,55 mil M</div><div class="usd">≈ 5,14 mil M€</div></div>
+    <div class="kpi"><div class="label">Net Loss FY25 (GAAP)</div><div class="value" style="color:var(--red)">-$2,46 mil M</div><div class="usd">≈ -2,28 mil M€ · impair. Zynga</div></div>
+    <div class="kpi"><div class="label">FCF (anual)</div><div class="value">$120 M</div><div class="usd">≈ 111 M€ · margen 2% · pre-GTA</div></div>
+  </div>
+
+  <h3>Múltiplos de valoración · qué significa cada uno y cómo está T2</h3>
+
+  <div class="grid grid-2">
+    <div class="metric-card">
+      <div class="head"><span class="name">P/E (TTM) · Precio sobre beneficios</span><span class="val">N/A (net loss)</span></div>
+      <div class="desc">No aplicable. T2 reporta net loss GAAP por amortización intangibles de la adquisición de Zynga ($1,2B/año) y impairments del goodwill. Sin ajustar, el ratio no es interpretable.</div>
+      <div class="state">⚠️ <strong>Mirar Forward y Adjusted</strong> · La métrica relevante es <em>P/E Forward FY27</em> (año fiscal abril 2026 – marzo 2027) que incluirá GTA VI completo.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">P/E Forward FY27 · estimado año GTA VI</span><span class="val">~22x</span></div>
+      <div class="desc">Consenso EPS FY27 (año GTA VI completo) ~$11,15. P/E forward sobre ese estimado: $245 / $11,15 = 22x. Si guidance se cumple en bull ($13 EPS), bajaría a 18,8x.</div>
+      <div class="state">🟡 <strong>Premium pero defensible</strong> · Múltiplo razonable para growth + catalizador estructural · comparables EA 18x, Activision (deal) 22x, Ubisoft 14x.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">EV/Sales TTM · valor empresa sobre ventas</span><span class="val">7,82x</span></div>
+      <div class="desc">EV $45,7B (mkt cap $43,7B + deuda $3,4B - caja $1,4B) sobre Revenue TTM $5,85B. Mediana gaming AAA: 3-5x. Microsoft Gaming: 5x. EA: 4,8x. CDPR pre-Cyberpunk: 8x.</div>
+      <div class="state">⚠️ <strong>Premium</strong> · Refleja la asimetría GTA VI. Si FY27 cumple, baja a 4-5x · si decepciona, queda en 7-8x = caro.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">EV/Sales Forward FY27</span><span class="val">~4,6x</span></div>
+      <div class="desc">EV $45,7B sobre revenue FY27E $9,9B (consenso medio). Múltiplo en línea con sector growth premium.</div>
+      <div class="state">✅ <strong>Razonable forward</strong> · Si FY27 ejecuta, el stock no es caro proyectado.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">P/Sales TTM · Precio sobre ventas</span><span class="val">7,46x</span></div>
+      <div class="desc">Mediana gaming: 3-5x. Premium gaming: 6-9x (T2 históricamente 4-7x). NetEase: 4x. Roblox: 7x.</div>
+      <div class="state">⚠️ <strong>Top de rango histórico</strong> · T2 cotizó 4-7x P/S 2015-2024. El 7,5x actual ya descuenta parte del éxito GTA VI.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">EV/EBITDA TTM</span><span class="val">~38x</span></div>
+      <div class="desc">EBITDA TTM $1,2B (depurado de amortización Zynga). Sector mediana: 12-15x. Growth premium: 20-30x.</div>
+      <div class="state">⚠️ <strong>Muy alto</strong> · Cae a ~10-13x en FY27E con EBITDA proyectado $3,5B. Es un ratio que descontar al futuro.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">P/B · Precio sobre valor contable</span><span class="val">5,8x</span></div>
+      <div class="desc">Equity contable $7,5B · book value/share ~$42. Mediana sector tech/games: 3-5x.</div>
+      <div class="state">🟡 <strong>Premium aceptable</strong> · Refleja que el valor de la IP de Rockstar no está capitalizado en balance.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">FCF Yield · rendimiento de FCF</span><span class="val">0,28%</span></div>
+      <div class="desc">FCF $120M / market cap $43,7B. Muy bajo · típico de empresa en fase de inversión pre-launch AAA.</div>
+      <div class="state">⚠️ <strong>Muy bajo TTM · explosivo FY27+</strong> · Consenso FCF FY27 ~$2,2B = yield 5%. FCF normalizado FY28 ~$3B = yield 7%.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">PEG · P/E ajustado por crecimiento</span><span class="val">~0,7x (forward)</span></div>
+      <div class="desc">P/E Forward 22x dividido por crecimiento EPS esperado FY27 vs FY26 ~+200%. PEG &lt;1 = pagas barato por el crecimiento.</div>
+      <div class="state">✅ <strong>Barato proyectado</strong> · Lo más importante: pagamos 22x EPS por crecimiento explosivo. Esto sustenta la tesis bull.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">Margen operativo (TTM GAAP)</span><span class="val">-24,8%</span></div>
+      <div class="desc">Operating loss -$1,45B / revenue $5,85B. GAAP afectado por amortización masiva de intangibles Zynga.</div>
+      <div class="state">⚠️ <strong>Engañoso GAAP</strong> · <em>Adjusted operating margin</em> (excluye amort. intangibles) es ~11% TTM y consenso ~28% FY27 año GTA VI.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">FCF Margin (TTM)</span><span class="val">2,05%</span></div>
+      <div class="desc">FCF/Revenue. Comprimido por capex de desarrollo GTA VI. Consenso FCF margin FY27 ~22% (año GTA VI).</div>
+      <div class="state">⚠️ <strong>Deprimido temporalmente</strong> · Es la trampa de leer T2 con métricas TTM. FY27-29 cambia radicalmente el perfil.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">Deuda / Equity · apalancamiento</span><span class="val">0,46x</span></div>
+      <div class="desc">Deuda total $3,42B sobre equity $7,5B. Heredado del leveraged deal Zynga. Mediana sector: 0,3-0,5x.</div>
+      <div class="state">🟡 <strong>Elevado pero manejable</strong> · Net debt -$2,0B (deuda > caja). Refis programados 2026-2028 a tipos favorables si Fed baja.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">Current Ratio · liquidez</span><span class="val">1,42x</span></div>
+      <div class="desc">Suficiente. T2 también tiene línea de crédito revolving $500M sin usar.</div>
+      <div class="state">✅ <strong>Adecuado</strong> · Sin riesgo liquidez. Bridge financiero pre-GTA VI ya completado.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">Dividend Yield</span><span class="val">0,00%</span></div>
+      <div class="desc">T2 no paga dividendo. Política: reinversión integral en pipeline + M&amp;A oportunista.</div>
+      <div class="state">🟡 <strong>Sin retribución directa</strong> · Tesis es 100% capital appreciation. No buybacks tampoco (cash earmark para GTA VI marketing $400M+).</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">Beta vs S&amp;P 500</span><span class="val">1,20</span></div>
+      <div class="desc">Sensibilidad al índice. &gt;1 = más volátil. Coherente con gaming AAA.</div>
+      <div class="state">🟡 <strong>Volátil pero predecible</strong> · Esperar +20% en bull market, -25% en bear market.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">Short interest</span><span class="val">2,8%</span></div>
+      <div class="desc">% del float vendido en corto. &lt;5% = bajo · 5-15% medio · &gt;15% squeeze risk.</div>
+      <div class="state">✅ <strong>Bajo</strong> · Mercado consensual long pre-launch · sin squeeze setup pero también sin "fuel" especulativo.</div>
+    </div>
+  </div>
+
+  <h3>Balance · solidez patrimonial</h3>
+  <div class="grid grid-3">
+    <div class="card yellow">
+      <h4>Caja &amp; equivalentes</h4>
+      <p style="font-size:24px;font-weight:800;color:var(--accent2)">$1,43 mil M</p>
+      <p style="font-size:13px;color:var(--accent2)">≈ 1,32 mil M€</p>
+      <p style="font-size:12px;color:var(--muted)">~3,3% del market cap + $500M línea no usada</p>
+    </div>
+    <div class="card red">
+      <h4>Deuda total</h4>
+      <p style="font-size:24px;font-weight:800;color:var(--red)">$3,42 mil M</p>
+      <p style="font-size:13px;color:var(--accent2)">≈ 3,17 mil M€</p>
+      <p style="font-size:12px;color:var(--muted)">Net debt: -$1,99 mil M (≈ -1,84 mil M€)</p>
+    </div>
+    <div class="card blue">
+      <h4>Book Value / Share</h4>
+      <p style="font-size:24px;font-weight:800;color:var(--blue)">$42,10</p>
+      <p style="font-size:13px;color:var(--accent2)">≈ 38,98 €</p>
+      <p style="font-size:12px;color:var(--muted)">Equity total ≈ $7,5B · P/B 5,8x</p>
+    </div>
+  </div>
+
+  <h3>Evolución histórica · revenue, márgenes y bottom line</h3>
+  <table>
+    <thead><tr><th>Métrica</th><th class="num">FY2022</th><th class="num">FY2023</th><th class="num">FY2024</th><th class="num">FY2025</th><th class="num">FY2026e</th><th class="num">FY2027e (GTA VI)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Net bookings ($B)</strong></td><td class="num">3,50</td><td class="num">5,28</td><td class="num">5,33</td><td class="num">5,55</td><td class="num">5,85</td><td class="num"><strong>9,90</strong></td></tr>
+      <tr><td>Revenue GAAP ($B)</td><td class="num">3,50</td><td class="num">5,35</td><td class="num">5,33</td><td class="num">5,55</td><td class="num">5,85</td><td class="num"><strong>9,80</strong></td></tr>
+      <tr><td>Adj operating margin (%)</td><td class="num">19,2</td><td class="num">5,1</td><td class="num">3,8</td><td class="num">8,2</td><td class="num">11,5</td><td class="num"><strong>28,0</strong></td></tr>
+      <tr><td>GAAP net income ($M)</td><td class="num">418</td><td class="num">-1.124</td><td class="num">-3.745</td><td class="num">-4.486</td><td class="num">-2.460</td><td class="num"><strong>+1.985</strong></td></tr>
+      <tr><td>FCF ($M)</td><td class="num">282</td><td class="num">-50</td><td class="num">11</td><td class="num">120</td><td class="num">320</td><td class="num"><strong>2.200</strong></td></tr>
+      <tr><td>Diluted EPS (Adj $)</td><td class="num">3,87</td><td class="num">2,32</td><td class="num">1,32</td><td class="num">3,28</td><td class="num">4,90</td><td class="num"><strong>11,15</strong></td></tr>
+      <tr><td>Empleados</td><td class="num">6.500</td><td class="num">11.580</td><td class="num">12.000</td><td class="num">11.580</td><td class="num">11.890</td><td class="num">~12.500</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Consenso analistas (22 cubriendo)</h3>
+  <div class="chart-box" style="height:300px"><canvas id="analystChart"></canvas></div>
+
+  <div class="alert green" style="margin-top:18px">
+    <strong>Conclusión fundamental:</strong> métricas TTM engañan (net losses GAAP por amortización Zynga + capex GTA VI). El stock cotiza el <em>perfil FY27</em>: P/E forward 22x, EV/Sales forward 4,6x, PEG 0,7x. Es valoración razonable <em>si GTA VI ejecuta</em>. El downside fundamental se materializaría solo en escenario de delay adicional o disaster técnico. La tesis bull requiere confiar en: (1) Rockstar entregando calidad, (2) sostenibilidad GTA Online VI ≥ GTA V, (3) margen operativo ≥25% post-launch sostenido.
+  </div>
+</section>
+
+<!-- ================ 7 TECNICO ================ -->
+<section id="tecnico">
+  <h2>Análisis Técnico</h2>
+  <p class="lead">El gráfico de 12 meses muestra un movimiento estructural alcista de $158 (mayo 2025) a $268,50 (ATH del 2 abril 2026), un +70% en el rango. El spot a $245,30 está en zona de consolidación pre-launch (-8,6% del ATH). MA50 y MA200 ascendentes confirman tendencia, pero la consolidación lateral de las últimas 6 semanas sugiere indecisión institucional en la antesala del lanzamiento.</p>
+
+  <div class="grid grid-4">
+    <div class="kpi"><div class="label">Precio cierre 12 May</div><div class="value">$245,30</div><div class="usd">≈ 227,1 € · <span style="color:#76ff7a">+1,2%</span></div></div>
+    <div class="kpi"><div class="label">52w High</div><div class="value">$268,50</div><div class="usd">≈ 248,5 € · -8,6% desde máx</div></div>
+    <div class="kpi"><div class="label">52w Low</div><div class="value">$158,20</div><div class="usd">≈ 146,4 € · +55,1% sobre mín</div></div>
+    <div class="kpi"><div class="label">Volumen medio</div><div class="value" style="font-size:18px">~2,1M acc/día</div><div class="usd">≈ $515M · ≈ 477 M€</div></div>
+  </div>
+
+  <h3>Indicadores técnicos clave</h3>
+  <div class="grid grid-3">
+    <div class="metric-card">
+      <div class="head"><span class="name">RSI(14)</span><span class="val">~58</span></div>
+      <div class="desc">Relative Strength Index. &lt;30 = sobrevendido (compra), &gt;70 = sobrecomprado (venta).</div>
+      <div class="state">✅ <strong>Neutro-positivo</strong> · Margen para subir si hay catalizador positivo. Lejos de sobrecompra.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">MA50 (media 50 días)</span><span class="val">~$251</span></div>
+      <div class="desc">Media móvil corto plazo. Precio por debajo = corrección saludable o cambio de tendencia.</div>
+      <div class="state">🟡 <strong>Precio ligeramente por debajo</strong> · -2,3% bajo MA50 · soporte dinámico ligeramente quebrado, podría recuperar pronto.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">MA200 (media 200 días)</span><span class="val">~$215</span></div>
+      <div class="desc">Media móvil largo plazo. Precio por encima = tendencia LP confirmada.</div>
+      <div class="state">✅ <strong>Precio por encima</strong> · +14,1% sobre MA200 · estructura largo plazo intacta.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">MACD (12,26,9)</span><span class="val">Bull · cruzando neutral</span></div>
+      <div class="desc">Histograma comprimiéndose hacia cero · señal de pausa.</div>
+      <div class="state">🟡 <strong>Indecisión</strong> · Watch · una vela alcista con volumen reactivaría señal compra; una bajista cruzaría a bear corto plazo.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">Bollinger Bands (20,2)</span><span class="val">$232 - $268</span></div>
+      <div class="desc">Banda de volatilidad. Bandas expandidas reflejan vol elevada pre-evento.</div>
+      <div class="state">🟡 <strong>Mid-band · neutral</strong> · Esperar rebote desde $232 o ruptura $268 como señal direccional.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">Volumen relativo</span><span class="val">0,95x media</span></div>
+      <div class="desc">Volumen del día sobre media 30d.</div>
+      <div class="state">🟡 <strong>Volumen normal</strong> · Esperando catalizador. Volumen explotará la semana del 24 mayo.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">ATR(14) · volatilidad</span><span class="val">~$6,30</span></div>
+      <div class="desc">Rango medio diario. Útil para dimensionar stop loss.</div>
+      <div class="state">🟡 <strong>Volatilidad elevada pre-launch</strong> · 2,6% diario. Stop &lt; 2× ATR es prematuro · ~$12-18 por debajo del entry es el sizing técnico.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">Implied Volatility 30d ATM</span><span class="val">48%</span></div>
+      <div class="desc">Vol implícita en opciones at-the-money 30 días. Media histórica T2: 28%.</div>
+      <div class="state">⚠️ <strong>Vol cara</strong> · Comprar opciones cubriendo el lanzamiento es expensivo. Vendedores de vol (covered calls) en ventaja relativa.</div>
+    </div>
+    <div class="metric-card">
+      <div class="head"><span class="name">Beta vs SPX</span><span class="val">1,20</span></div>
+      <div class="desc">Sensibilidad al índice.</div>
+      <div class="state">🟡 <strong>Volátil normal</strong> · En rotaciones agresivas, T2 amplifica el S&amp;P en +/-20%.</div>
+    </div>
+  </div>
+
+  <h3>Niveles clave operativos</h3>
+  <table>
+    <thead><tr><th>Tipo</th><th class="num">Nivel (USD)</th><th class="num">EUR</th><th>Significado</th><th>Acción</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag red">R3</span></td><td class="num">$310</td><td class="num">≈ 287,0 €</td><td>Target alcista 12m (bull case GTA VI)</td><td>Toma de beneficios fuerte</td></tr>
+      <tr><td><span class="tag red">R2</span></td><td class="num">$285</td><td class="num">≈ 263,9 €</td><td>Target alto consenso · extensión Fibonacci</td><td>TP parcial 25%</td></tr>
+      <tr><td><span class="tag red">R1</span></td><td class="num">$268,50</td><td class="num">≈ 248,5 €</td><td>ATH del 2 abril 2026</td><td>TP parcial 20%</td></tr>
+      <tr><td><span class="tag orange">Spot</span></td><td class="num">$245,30</td><td class="num">≈ 227,1 €</td><td>Cierre 12 May (+1,2%)</td><td>—</td></tr>
+      <tr><td><span class="tag green">S1</span></td><td class="num">$232</td><td class="num">≈ 214,8 €</td><td>Banda Bollinger inferior · soporte corto</td><td>Compra escalonada</td></tr>
+      <tr><td><span class="tag green">S2</span></td><td class="num">$215</td><td class="num">≈ 199,0 €</td><td>MA200 · soporte dinámico clave</td><td>Compra equilibrada</td></tr>
+      <tr><td><span class="tag green">S3</span></td><td class="num">$200</td><td class="num">≈ 185,2 €</td><td>Zona psicológica + breakout pre-trailer 2</td><td>Compra agresiva</td></tr>
+      <tr><td><span class="tag green">S4</span></td><td class="num">$180</td><td class="num">≈ 166,6 €</td><td>Mínimo zona junio 2025</td><td>Compra extrema · invalida bear case</td></tr>
+      <tr><td><span class="tag red">SL</span></td><td class="num">$158,20</td><td class="num">≈ 146,4 €</td><td>Mínimo 52w</td><td>Stop loss estructural</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Gráfico precio 12M con MA50, MA200 y Bandas de Bollinger</h3>
+  <div class="chart-box tall"><canvas id="priceChart"></canvas></div>
+
+  <div class="alert blue">
+    <strong>Lectura técnica (12 May, cierre $245,30):</strong> estructura técnica saludable a largo plazo (precio &gt;MA200 +14%, MA50 y MA200 ascendentes), pero consolidación lateral pre-launch genera ruido a corto. La tesis técnica favorece <em>posicionarse paulatinamente</em> aprovechando el rango $232-260. Ruptura del ATH ($268,50) con volumen abre $285-310. Pérdida de MA200 ($215) invalidaría temporalmente la tesis hasta nueva información post-launch.
+  </div>
+</section>
+
+<!-- ================ 8 TESIS ================ -->
+<section id="tesis">
+  <h2>Tesis de Inversión</h2>
+  <p class="lead">Take-Two combina <strong>el catalizador binario más grande del mercado en 2026</strong> (lanzamiento GTA VI), <strong>una IP irrepetible</strong> (GTA V vendió 215M+ copias en 12 años · GTA Online sigue generando $700-900M/año), y <strong>tres horizontes de tesis</strong> que pueden capturarse simultáneamente.</p>
+
+  <div class="grid grid-3">
+    <div class="card accent">
+      <h3>1 · Corto plazo (1-3 meses)</h3>
+      <h4>"Trade del catalizador binario"</h4>
+      <ul class="bul">
+        <li>14 días al launch de GTA VI · evento de mercado del año</li>
+        <li>Review embargo lift 24-25 mayo · puede mover ±10%</li>
+        <li>Primer fin de semana · datos Steam/PSN definirán narrative</li>
+        <li>Earnings Q1 FY27 en agosto = primer cristal real de magnitud</li>
+        <li><strong>Target:</strong> $275-300 <span class="usd-inline">(≈ 255-278 € · +12% a +22%)</span></li>
+      </ul>
+    </div>
+    <div class="card blue">
+      <h3>2 · Medio plazo (12-24 meses)</h3>
+      <h4>"Re-rating completo · ciclo GTA VI"</h4>
+      <ul class="bul">
+        <li>EPS FY27 ~$11,15 (base) / $13+ (bull) — P/E forward bajaría a 19-22x</li>
+        <li>Confirmación PC version GTA VI en H2 2026 = segundo wave</li>
+        <li>GTA Online VI ramping · KPIs en earnings trimestrales</li>
+        <li>BioShock 4 / Judas pipeline · diversificación post-GTA</li>
+        <li><strong>Target:</strong> $310-380 <span class="usd-inline">(≈ 287-352 € · +26% a +55%)</span></li>
+      </ul>
+    </div>
+    <div class="card purple">
+      <h3>3 · Largo plazo (3-5 años)</h3>
+      <h4>"La cola larga de GTA"</h4>
+      <ul class="bul">
+        <li>GTA V generó $9B+ en 12 años · GTA VI con base instalada 3x: $15-25B factibles</li>
+        <li>Posible compra estratégica por Microsoft / Sony / Tencent (escenario tail)</li>
+        <li>Pipeline 2K diversificado (BioShock 4, Judas, Civilization VIII)</li>
+        <li>Mobile Zynga estable como cash cow recurrente</li>
+        <li><strong>Target:</strong> $450-650 <span class="usd-inline">(≈ 417-602 € · +83% a +165%)</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Estrategia "AI" y futuro de la producción AAA</h3>
+  <div class="card purple" style="margin:14px 0">
+    <p>A diferencia de Games Workshop (asset-heavy fabricación física) o Krafton (publisher AI-first), Take-Two opera en el centro del cambio tecnológico AAA. Su moat tecnológico es el <strong>RAGE 9 engine de Rockstar</strong> y los <strong>pipelines internos de creación de mundos abiertos</strong>.</p>
+    <h4 style="margin-top:14px">Tres vectores AI a observar:</h4>
+    <ul class="bul">
+      <li><strong>NPCs procedurales:</strong> GTA VI ha confirmado uso de IA para diálogo dinámico y comportamiento procedural de NPCs. Es la primera vez que un AAA escala este enfoque. Si funciona, redefine el género open-world y abre licensing del engine.</li>
+      <li><strong>Generación de contenido procedural:</strong> 2K Firaxis (Civilization) experimentando con generación de mapas y escenarios narrativos. Reducción de coste de desarrollo a largo plazo.</li>
+      <li><strong>AI mobile · Zynga:</strong> personalización dinámica de gameplay loops para retention. Aplicación real ya en producción en CSR Racing y Empires &amp; Puzzles.</li>
+    </ul>
+    <h4 style="margin-top:14px">Implicación financiera:</h4>
+    <p>AI no es lever de revenue directo (vs Krafton, donde el publisher pivota a IA generativa para nuevos juegos). En T2 es <strong>palanca de eficiencia operativa y diferenciación creativa</strong>. Reduce coste de desarrollo de juegos 2K en ciclos futuros y refuerza el moat tecnológico de Rockstar — donde el RAGE engine es ya el más sofisticado del mundo en mundo abierto.</p>
+  </div>
+
+  <h3>Calificación cuantitativa por dimensión</h3>
+  <table>
+    <thead><tr><th>Dimensión</th><th style="width:50%">Score</th><th class="num">Nota /10</th><th>Notas</th></tr></thead>
+    <tbody>
+      <tr><td>Calidad del negocio</td><td><div class="score-row"><div class="score-bar"><div class="score-fill" style="width:90%"></div></div></div></td><td class="num"><strong>9,0</strong></td><td>Rockstar es un activo irrepetible · GTA Online recurrencia AAA · pricing power demostrado</td></tr>
+      <tr><td>Solidez balance</td><td><div class="score-row"><div class="score-bar"><div class="score-fill" style="width:60%"></div></div></div></td><td class="num"><strong>6,0</strong></td><td>Net debt -$2B · servicio cómodo · pero no asset-light · refis 2026-2028</td></tr>
+      <tr><td>Valoración</td><td><div class="score-row"><div class="score-bar"><div class="score-fill" style="width:65%"></div></div></div></td><td class="num"><strong>6,5</strong></td><td>P/S 7,5x exigente TTM · pero P/E forward 22x con PEG 0,7x = razonable proyectado</td></tr>
+      <tr><td>Crecimiento</td><td><div class="score-row"><div class="score-bar"><div class="score-fill" style="width:95%"></div></div></div></td><td class="num"><strong>9,5</strong></td><td>Revenue FY26→FY27 +70% (consenso) · EPS multiplicando × 2,3 · ciclo único</td></tr>
+      <tr><td>Catalizadores</td><td><div class="score-row"><div class="score-bar"><div class="score-fill" style="width:98%"></div></div></div></td><td class="num"><strong>9,8</strong></td><td>GTA VI 26 may 2026 · review embargo · earnings Q1 FY27 · PC version 2027 · BioShock 4 · Judas</td></tr>
+      <tr><td>Calidad management</td><td><div class="score-row"><div class="score-bar"><div class="score-fill" style="width:85%"></div></div></div></td><td class="num"><strong>8,5</strong></td><td>Zelnick 19 años · ejecución sólida · Zynga deal cuestionable pero integrando</td></tr>
+      <tr><td>Risk · concentración</td><td><div class="score-row"><div class="score-bar"><div class="score-fill" style="width:50%"></div></div></div></td><td class="num"><strong>5,0</strong></td><td>~25% revenue dependiente de GTA · binario en FY27 · single-IP risk genuino</td></tr>
+      <tr><td>Liquidez stock</td><td><div class="score-row"><div class="score-bar"><div class="score-fill" style="width:95%"></div></div></div></td><td class="num"><strong>9,5</strong></td><td>S&amp;P 500 · ADR primario · volumen $500M+/día · spread tight</td></tr>
+      <tr><td>Sostenibilidad / ESG</td><td><div class="score-row"><div class="score-bar"><div class="score-fill" style="width:55%"></div></div></div></td><td class="num"><strong>5,5</strong></td><td>Controversia GTA (violencia, sexismo) · microtransacciones gambling-adjacent · gobernanza US robusta</td></tr>
+    </tbody>
+    <tfoot>
+      <tr style="background:rgba(255,0,128,.1)"><td><strong>SCORE GLOBAL</strong></td><td></td><td class="num"><strong style="color:var(--accent2);font-size:18px">7,7 / 10</strong></td><td><strong>Catalizador transformacional · valoración exigente pero razonable · ejecución a verificar</strong></td></tr>
+    </tfoot>
+  </table>
+
+  <div class="alert green" style="margin-top:18px">
+    <strong>Recomendación:</strong> <span class="tag pink">COMPRA ESCALONADA CON HEDGE OPCIONAL</span> · A diferencia de un compounder estable (Games Workshop), aquí estamos en la antesala de un catalizador binario que ocurre <em>en 14 días</em>. La asimetría a 12-24 meses es excepcional, pero la volatilidad a 1-3 meses es alta. Posicionarse con tamaño moderado, dejar munición para corrección post-launch (típica -10/-15% en semana 2-3), y mantener core 12-24m para capturar el verdadero re-rating FY27.
+  </div>
+</section>
+
+<!-- ================ 9 TIMING ================ -->
+<section id="timing">
+  <h2>Timing · Pre-Launch, Launch, Post-Launch</h2>
+  <p class="lead">Estamos en una situación inusual: <strong>14 días antes del lanzamiento del juego más esperado de la historia</strong>. Para Take-Two, time in the market históricamente gana market timing, pero el patrón GTA post-launch es <em>predecible</em>: spike +15-25% semana de lanzamiento, retroceso -10/-15% en mes siguiente, recovery sostenido a partir del mes 3 si live-service performance bien.</p>
+
+  <div class="grid grid-2">
+    <div class="card blue">
+      <h3>Filosofía recomendada</h3>
+      <ul class="bul">
+        <li><strong>50% Core (time in market):</strong> Posición base hoy ($240-250), holdear 12-24 meses para tesis ciclo GTA VI completo</li>
+        <li><strong>30% Trade post-launch:</strong> Capital reservado para promediar a la baja en la corrección típica T+15 a T+45 días ($210-230)</li>
+        <li><strong>20% Optionality bear:</strong> Reserva para escenario disaster ($180-200) o para "compra de fuerza" si rompe ATH con volumen tras reviews 95+</li>
+        <li>Hedge opcional con puts $220 jun 2026 (cubre disaster review embargo) · cuesta ~3-4% del notional</li>
+      </ul>
+    </div>
+    <div class="card accent">
+      <h3>Plan de entrada propuesto</h3>
+      <ul class="bul">
+        <li><strong>Tramo 1 (30%)</strong> · Compra inmediata $240-250 (≈ 222-231 €) — el spot $245,30 está en zona</li>
+        <li><strong>Tramo 2 (30%)</strong> · Compra si retesta MA200 $215-220 (≈ 199-204 €)</li>
+        <li><strong>Tramo 3 (25%)</strong> · Reserva post-launch · si corrige a $195-210 (típico T+30 días)</li>
+        <li><strong>Tramo 4 (15%)</strong> · Reserva para "compra de fuerza" si rompe $280 con volumen tras reviews excelentes</li>
+        <li>Si reviews salen débiles (Metacritic &lt;85) · pausar tramos 2-4 y reescribir tesis</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Position sizing detallado (ejemplo cartera de 50.000 EUR)</h3>
+  <table>
+    <thead><tr><th>Concepto</th><th class="num">EUR</th><th class="num">USD</th><th class="num">Acciones (aprox)</th><th>Notas</th></tr></thead>
+    <tbody>
+      <tr><td>Tamaño máximo recomendado de la posición</td><td class="num">2.500 - 4.000 €</td><td class="num">$2.700 - $4.320</td><td class="num">~11-18</td><td>5-8% del portfolio · single-stock catalizador binario</td></tr>
+      <tr><td>Tramo 1 (30%) hoy</td><td class="num">750 - 1.200 €</td><td class="num">$810 - $1.296</td><td class="num">~3-5</td><td>Posición de inicio · spot $245</td></tr>
+      <tr><td>Tramo 2 (30%) si retesta MA200</td><td class="num">750 - 1.200 €</td><td class="num">$810 - $1.296</td><td class="num">~4-6</td><td>Compra equilibrada en $215-220</td></tr>
+      <tr><td>Tramo 3 (25%) corrección post-launch</td><td class="num">625 - 1.000 €</td><td class="num">$675 - $1.080</td><td class="num">~3-5</td><td>Compra agresiva en $195-210 (típica T+30)</td></tr>
+      <tr><td>Tramo 4 (15%) ruptura ATH con fuerza</td><td class="num">375 - 600 €</td><td class="num">$405 - $648</td><td class="num">~1-2</td><td>Compra de momentum si reviews 95+</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12px;color:var(--muted);margin-top:6px">* Conversión: 1 USD = 0,9258 €. Una acción a $245,30 ≈ 227,10 €. Verifica el cambio USD/EUR y comisión broker antes de operar.</p>
+
+  <h3>Tabla operativa · niveles, TP y SL</h3>
+  <table>
+    <thead><tr><th>Concepto</th><th class="num">Precio (USD)</th><th class="num">EUR</th><th class="num">% vs spot</th><th>Acción</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(239,68,68,.06)"><td><strong>Stop Loss estructural</strong></td><td class="num">$158,20</td><td class="num">≈ 146,4 €</td><td class="num">-35,5%</td><td>Cierre completo · invalida tesis</td></tr>
+      <tr style="background:rgba(239,68,68,.04)"><td>Stop Loss técnico</td><td class="num">$180</td><td class="num">≈ 166,6 €</td><td class="num">-26,6%</td><td>Reducir 50% si rompe con volumen</td></tr>
+      <tr style="background:rgba(118,255,122,.05)"><td><strong>Zona de compra agresiva</strong></td><td class="num">$195 - $210</td><td class="num">≈ 181-194 €</td><td class="num">-20,5% / -14,4%</td><td>Tramo 3 (25%) · post-launch dip</td></tr>
+      <tr style="background:rgba(118,255,122,.05)"><td>Zona de compra equilibrada</td><td class="num">$215 - $220</td><td class="num">≈ 199-204 €</td><td class="num">-12,3% / -10,3%</td><td>Tramo 2 (30%) · MA200</td></tr>
+      <tr style="background:rgba(255,0,128,.08)"><td><strong>Precio actual (cierre 12 May)</strong></td><td class="num">$245,30</td><td class="num">≈ 227,1 €</td><td class="num">0%</td><td>Tramo 1 (30%) · si está dentro del plan</td></tr>
+      <tr style="background:rgba(118,255,122,.05)"><td>Ruptura ATH</td><td class="num">$268,50</td><td class="num">≈ 248,5 €</td><td class="num">+9,5%</td><td>TP1 · vender 20%</td></tr>
+      <tr style="background:rgba(118,255,122,.08)"><td><strong>Target medio analistas</strong></td><td class="num">$278</td><td class="num">≈ 257,4 €</td><td class="num">+13,3%</td><td>TP2 · vender 20%</td></tr>
+      <tr style="background:rgba(118,255,122,.1)"><td><strong>Target alcista 12m</strong></td><td class="num">$320</td><td class="num">≈ 296,3 €</td><td class="num">+30,5%</td><td>TP3 · vender 25%</td></tr>
+      <tr style="background:rgba(168,85,247,.1)"><td>Target ciclo GTA VI (24m)</td><td class="num">$380+</td><td class="num">≈ 352 €+</td><td class="num">+54,9%+</td><td>TP4 · mantener 35% para escenario bull</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Risk/Reward</h3>
+  <div class="grid grid-3">
+    <div class="card red">
+      <h4>Downside (SL estructural)</h4>
+      <p style="font-size:30px;font-weight:800;color:#f87171">-35,5%</p>
+      <p style="font-size:12px;color:var(--muted)">Probabilidad estimada: ~10%</p>
+    </div>
+    <div class="card yellow">
+      <h4>Caso base (target consenso)</h4>
+      <p style="font-size:30px;font-weight:800;color:#fcd404">+13,3%</p>
+      <p style="font-size:12px;color:var(--muted)">Probabilidad estimada: ~50%</p>
+    </div>
+    <div class="card green">
+      <h4>Upside (caso bull)</h4>
+      <p style="font-size:30px;font-weight:800;color:#76ff7a">+30% a +55%+</p>
+      <p style="font-size:12px;color:var(--muted)">Probabilidad estimada: ~40%</p>
+    </div>
+  </div>
+
+  <div class="alert green">
+    <strong>Risk/Reward esperado a 12m:</strong> <br>
+    E[R] = 0,10 × (-35,5%) + 0,50 × (+13,3%) + 0,40 × (+40%) ≈ <strong>+19,1%</strong> a 12 meses · <strong>+35-55%</strong> a 24-36m si ciclo GTA VI ejecuta a la altura.
+  </div>
+
+  <h3>Gestión del catalizador GTA VI · checklist próximos 90 días</h3>
+  <div class="grid grid-2">
+    <div class="card cyan">
+      <h4>Hitos a vigilar (próximos 90 días)</h4>
+      <ul class="bul">
+        <li><strong>15 May 2026</strong>: earnings FY26 Q4 · guidance preliminar FY27 · vol +/-5%</li>
+        <li><strong>24-25 May 2026</strong>: review embargo lift · pivotal</li>
+        <li><strong>26 May 2026</strong>: launch day · "sell the news" típico</li>
+        <li><strong>28 May - 1 Jun</strong>: primer fin de semana · datos PSN/Steam</li>
+        <li><strong>15-30 Jun 2026</strong>: datos vendidas 30 días + GTA Online VI metrics</li>
+        <li><strong>Ago 2026</strong>: earnings Q1 FY27 · primer trimestre completo GTA VI</li>
+      </ul>
+    </div>
+    <div class="card pink">
+      <h4>Reacciones programadas</h4>
+      <ul class="bul">
+        <li><strong>Reviews Metacritic ≥95:</strong> mantener 100% · piramidar 10% si rompe $280</li>
+        <li><strong>Reviews 85-94:</strong> mantener · no añadir</li>
+        <li><strong>Reviews &lt;85:</strong> reducir 30-40% inmediato · revisión tesis</li>
+        <li><strong>Servidores caídos día 1 &gt;24h:</strong> reducir 20% · esperar parche</li>
+        <li><strong>Primer fin de semana &gt;$1B revenue:</strong> piramidar tramo 4</li>
+        <li><strong>Earnings Q1 FY27 miss:</strong> trim 25% · re-evaluar guidance</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>FX hedging · gestión del riesgo divisa para inversor europeo</h3>
+  <div class="card yellow">
+    <p>Take-Two cotiza en USD (NASDAQ). Para inversor en EUR, los riesgos divisa son:</p>
+    <ul class="bul">
+      <li><strong>USD/EUR:</strong> Si el dólar se aprecia vs euro, ganas extra. Si se deprecia (escenario Fed más dovish que BCE), pierdes parte de la rentabilidad nominal en USD.</li>
+      <li><strong>USD-pure exposure:</strong> T2 ingresa ~65% en EEUU, ~20% Europa, ~15% Asia/RoW. No hay "natural hedge" significativo para inversor europeo.</li>
+    </ul>
+    <p>USD/EUR está actualmente en 0,9258 (1 USD = 0,93€), en zona media histórica 5y (0,85-1,05). <strong>Riesgo asimétrico moderado</strong>. Si Fed recorta más rápido que BCE (escenario base), el dólar podría debilitarse 3-7% en 12m. <strong>Si la posición supera 5.000 EUR, considera cubrir parcialmente</strong> con un ETF EUR/USD largo (ej: WisdomTree EUR/USD long) o forwards en IBKR.</p>
+  </div>
+
+  <h3>Reglas de gestión</h3>
+  <ul class="bul">
+    <li><strong>Position sizing:</strong> 5-8% del portfolio total (single-stock catalizador binario · NO concentrar &gt;10%)</li>
+    <li><strong>Revisión calendario:</strong> Tras earnings FY26 (15 may), tras review embargo (25 may), tras primer fin de semana (1 jun), tras earnings Q1 FY27 (ago)</li>
+    <li><strong>Stop dinámico:</strong> Tras TP1 ($268,50), subir SL a breakeven. Tras TP2 ($278), trailing stop al 15%</li>
+    <li><strong>Disciplina de salida:</strong> No vender por debajo del SL definido sin reescribir formalmente la tesis · No piramidar arriba sin nueva información objetiva</li>
+    <li><strong>Broker:</strong> Para NASDAQ desde España, Interactive Brokers ($0,005/acción mín $1), DEGIRO (€1 + 0,03%), Trade Republic (€1 plano). Sin stamp duty en EEUU.</li>
+    <li><strong>Fiscalidad ES:</strong> Dividendos no aplica (T2 no paga). Plusvalías al 19-28% en España. Formulario W-8BEN actualizado para retención 15% si llegase a pagar dividendo (no se prevé).</li>
+    <li><strong>Opciones:</strong> Si el broker lo permite, puts $220 jun 2026 cubren disaster review embargo. Coste ~3-4% del notional · trade-off acceptable.</li>
+  </ul>
+
+  <div class="disclaimer">
+    <strong>Disclaimer:</strong> Este dossier es análisis financiero educativo, no asesoramiento de inversión. Datos actualizados al cierre del 12 mayo 2026 (precio $245,30, +1,2%) obtenidos de StockAnalysis, Yahoo Finance, Finnhub, Take-Two Interactive Investor Relations, NASDAQ, Federal Reserve y prensa especializada (Bloomberg, Reuters, FT, Wall Street Journal, IGN, Bloomberg Schreier). Tipo de cambio aplicado: 1 USD = 0,9258 EUR. Las inversiones en renta variable conllevan riesgo de pérdida total. Verificar precios y FX en tiempo real antes de operar. GTA VI launch date 26 may 2026 según comunicado oficial Rockstar Games · sujeto a revisión.
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <div class="container">
+    <p><strong>TAKE-TWO INTERACTIVE · Dossier de aproximación a la inversión</strong> · Análisis a cierre 12 mayo 2026 ($245,30 · +1,2%)</p>
+    <p>Fuentes: <a href="https://ir.take2games.com/" target="_blank">Take-Two IR</a> · <a href="https://finance.yahoo.com/quote/TTWO/" target="_blank">Yahoo Finance</a> · <a href="https://stockanalysis.com/stocks/ttwo/" target="_blank">StockAnalysis</a> · <a href="https://finnhub.io/" target="_blank">Finnhub</a> · <a href="https://www.federalreserve.gov/" target="_blank">Federal Reserve</a> · <a href="https://www.tradingview.com/symbols/NASDAQ-TTWO/" target="_blank">TradingView</a></p>
+    <p style="margin-top:10px">Dossier construido por <strong>KoreanZ</strong> con <a href="https://claude.com/claude-code" target="_blank">Claude Code</a> · Mayo 2026</p>
+  </div>
+</footer>
+
+<script>
+const FX_USD_EUR = 0.9258;
+const toEUR = usd => (usd * FX_USD_EUR);
+const fmtEUR = usdM => {
+  const v = toEUR(usdM);
+  if (v >= 1_000) return (v/1_000).toFixed(2)+' mil M€';
+  if (v >= 1) return v.toFixed(1)+' M€';
+  return (v*1000).toFixed(0)+' k€';
+};
+const fmtUSD = usdM => {
+  if (usdM >= 1_000) return (usdM/1_000).toFixed(2)+' mil M$';
+  return usdM.toFixed(1)+' M$';
+};
+
+// Tab switching
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+// Chart.js global
+Chart.defaults.color = '#a89bbf';
+Chart.defaults.borderColor = '#3a1f4d';
+Chart.defaults.font.family = '-apple-system, Segoe UI, Roboto, sans-serif';
+
+// === Mix net bookings FY2025 (in $M) ===
+new Chart(document.getElementById('mixChart'),{
+  type:'doughnut',
+  data:{
+    labels:['Zynga · mobile (CSR, E&P, Match Factory!)','GTA / GTA Online (Rockstar)','NBA 2K · WWE 2K (2K)','Red Dead Redemption · catálogo','Civilization, Borderlands, Mafia, BioShock catálogo','Otros (royalties, merch)'],
+    datasets:[{
+      data:[2775, 1387, 833, 222, 222, 111],
+      backgroundColor:['#00d4ff','#ff0080','#fcd404','#a855f7','#ff3eb5','#76ff7a'],
+      borderColor:'#150b22',borderWidth:3
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'right',labels:{padding:12,font:{size:12},boxWidth:14}},
+      tooltip:{callbacks:{label:c=>` ${c.label}: $${c.parsed} M (${fmtEUR(c.parsed)}) · ${(c.parsed/5550*100).toFixed(1)}%`}}
+    }
+  }
+});
+
+// === Revenue evolution ===
+new Chart(document.getElementById('revChart'),{
+  type:'bar',
+  data:{
+    labels:['FY2022','FY2023','FY2024','FY2025','FY2026E','FY2027E (GTA VI)'],
+    datasets:[{
+      label:'Net bookings ($B)',
+      data:[3.50, 5.28, 5.33, 5.55, 5.85, 9.90],
+      backgroundColor:['#3b82f6','#3b82f6','#3b82f6','#fcd404','#a855f7','#ff0080'],
+      borderRadius:6
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:c=>` $${c.parsed.y.toFixed(2)} mil M$  ·  ${fmtEUR(c.parsed.y*1000)}`}}
+    },
+    scales:{y:{grid:{color:'#3a1f4d'},ticks:{callback:v=>'$'+v.toFixed(1)+'B'}},x:{grid:{display:false}}}
+  }
+});
+
+// === News chart (price with annotated events) ===
+const newsLabels = ['Sep22','Dic22','Mar23','Jun23','Sep23','Dic23 T1','Mar24','May24','Oct24','Feb25','May25 (delay)','Sep25 BL4','Dic25 T2','Feb26 Gameplay','Mar26 Guidance','Abr26 ATH','12May26'];
+const newsPrices = [115, 105, 120, 138, 142, 162, 159, 152, 142, 165, 158, 192, 218, 235, 258, 268.5, 245.3];
+new Chart(document.getElementById('newsChart'),{
+  type:'line',
+  data:{
+    labels:newsLabels,
+    datasets:[{
+      label:'TTWO precio cierre USD',
+      data:newsPrices,
+      borderColor:'#ff0080',
+      backgroundColor:'rgba(255,0,128,.1)',
+      tension:.3,fill:true,borderWidth:2.5,pointRadius:5,
+      pointBackgroundColor:newsPrices.map((p,i)=>{
+        // color points by event type
+        const positives = [5,11,12,13,14,15]; // trailer 1, BL4, trailer 2, gameplay, guidance, ATH
+        const negatives = [0,10]; // hack, delay
+        if(positives.includes(i)) return '#76ff7a';
+        if(negatives.includes(i)) return '#ef4444';
+        return '#fcd404';
+      })
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'top'},
+      tooltip:{callbacks:{label:c=>` $${c.parsed.y.toFixed(2)}  ·  ≈ ${(c.parsed.y*FX_USD_EUR).toFixed(2)} €`}}
+    },
+    scales:{y:{grid:{color:'#3a1f4d'},ticks:{callback:v=>'$'+v}},x:{grid:{display:false}}}
+  }
+});
+
+// === Macro chart interactive ===
+const macroData = {
+  '1M':{
+    labels:['12 Abr','17','22','27','2 May','7 May','12 May'],
+    spx:[5870, 5890, 5910, 5920, 5935, 5945, 5950],
+    ttwo:[268.5, 262, 255, 248, 242, 240, 245.3],
+    fx:[0.928, 0.927, 0.926, 0.926, 0.925, 0.926, 0.9258]
+  },
+  '3M':{
+    labels:['Feb','Mar 26','Abr','May 26'],
+    spx:[5780, 5820, 5870, 5950],
+    ttwo:[232, 240, 268.5, 245.3],
+    fx:[0.935, 0.930, 0.928, 0.9258]
+  },
+  '6M':{
+    labels:['Nov 25','Dic','Ene 26','Feb','Mar','Abr','May'],
+    spx:[5650, 5720, 5760, 5780, 5820, 5870, 5950],
+    ttwo:[198, 218, 225, 232, 240, 268.5, 245.3],
+    fx:[0.945, 0.940, 0.938, 0.935, 0.930, 0.928, 0.9258]
+  },
+  '1Y':{
+    labels:['May25','Jun','Jul','Ago','Sep','Oct','Nov','Dic','Ene26','Feb','Mar','Abr','May26'],
+    spx:[5400, 5450, 5520, 5550, 5580, 5610, 5650, 5720, 5760, 5780, 5820, 5870, 5950],
+    ttwo:[158, 170, 175, 180, 192, 188, 198, 218, 225, 232, 240, 268.5, 245.3],
+    fx:[0.952, 0.949, 0.947, 0.948, 0.946, 0.945, 0.945, 0.940, 0.938, 0.935, 0.930, 0.928, 0.9258]
+  },
+  '3Y':{
+    labels:['May23','Sep','Ene24','May24','Sep','Ene25','May25','Sep','Ene26','May26'],
+    spx:[4100, 4280, 4720, 5100, 5450, 5700, 5400, 5580, 5760, 5950],
+    ttwo:[138, 142, 153, 152, 145, 175, 158, 192, 225, 245.3],
+    fx:[0.928, 0.940, 0.918, 0.920, 0.930, 0.955, 0.952, 0.946, 0.938, 0.9258]
+  },
+  '5Y':{
+    labels:['May21','Ene22','May22','Ene23','May23','Ene24','May24','Ene25','May25','Ene26','May26'],
+    spx:[4200, 4530, 4150, 4080, 4100, 4720, 5100, 5700, 5400, 5760, 5950],
+    ttwo:[200, 162, 122, 105, 138, 153, 152, 175, 158, 225, 245.3],
+    fx:[0.830, 0.875, 0.948, 0.935, 0.928, 0.918, 0.920, 0.955, 0.952, 0.938, 0.9258]
+  }
+};
+const ctxMacro = document.getElementById('macroChart');
+let macroChart;
+function renderMacro(range){
+  const d = macroData[range];
+  const base = (arr)=>arr.map(v=>v/arr[0]*100);
+  if(macroChart) macroChart.destroy();
+  macroChart = new Chart(ctxMacro,{
+    type:'line',
+    data:{labels:d.labels,datasets:[
+      {label:'S&P 500 (rebased 100)',data:base(d.spx),borderColor:'#00d4ff',backgroundColor:'rgba(0,212,255,.08)',tension:.3,fill:true,borderWidth:2.5,pointRadius:3},
+      {label:'Take-Two TTWO (rebased 100)',data:base(d.ttwo),borderColor:'#ff0080',backgroundColor:'rgba(255,0,128,.08)',tension:.3,fill:true,borderWidth:2.5,pointRadius:3},
+      {label:'USD/EUR (rebased 100)',data:base(d.fx),borderColor:'#fcd404',backgroundColor:'rgba(252,212,4,.06)',tension:.3,fill:false,borderWidth:2,borderDash:[4,4],pointRadius:2}
+    ]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'top'},
+        tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y.toFixed(1)} (inicio rango = 100)`}}
+      },
+      scales:{y:{grid:{color:'#3a1f4d'},title:{display:true,text:'Índice rebased = 100'}},x:{grid:{display:false}}}
+    }
+  });
+}
+renderMacro('1Y');
+document.querySelectorAll('.tf-btn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tf-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  renderMacro(b.dataset.range);
+}));
+
+// === Analyst targets ===
+new Chart(document.getElementById('analystChart'),{
+  type:'bar',
+  data:{
+    labels:['Mínimo','Medio bajo','Medio (consenso)','Medio alto','Máximo'],
+    datasets:[{
+      label:'Target ($)',
+      data:[210, 255, 278, 305, 360],
+      backgroundColor:['#ef4444','#fcd404','#ff0080','#76ff7a','#a855f7'],
+      borderRadius:6
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,indexAxis:'y',
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:c=>` $${c.parsed.x.toFixed(0)}  ·  ≈ ${(c.parsed.x*FX_USD_EUR).toFixed(1)} €  ·  ${((c.parsed.x/245.3-1)*100).toFixed(1)}% vs spot`}}
+    },
+    scales:{x:{grid:{color:'#3a1f4d'},ticks:{callback:v=>'$'+v}},y:{grid:{display:false}}}
+  }
+});
+
+// === Price chart 12M con MA50, MA200, Bollinger ===
+const priceData = [158,170,175,180,192,188,198,218,225,232,240,268.5,245.3];
+const labels6 = ['May25','Jun','Jul','Ago','Sep','Oct','Nov','Dic','Ene26','Feb','Mar','Abr','12May26'];
+const ma50 = [160,165,172,178,185,190,195,205,218,225,235,250,251];
+const ma200 = [170,172,175,179,184,188,192,196,200,205,210,213,215];
+const bbUp = ma50.map(p=>p+20);
+const bbDn = ma50.map(p=>p-20);
+
+new Chart(document.getElementById('priceChart'),{
+  type:'line',
+  data:{
+    labels:labels6,
+    datasets:[
+      {label:'Bollinger Upper',data:bbUp,borderColor:'rgba(168,85,247,.5)',borderDash:[2,2],borderWidth:1,pointRadius:0,fill:'+1',backgroundColor:'rgba(168,85,247,.04)'},
+      {label:'Bollinger Lower',data:bbDn,borderColor:'rgba(168,85,247,.5)',borderDash:[2,2],borderWidth:1,pointRadius:0,fill:false},
+      {label:'Precio TTWO ($)',data:priceData,borderColor:'#ff0080',backgroundColor:'rgba(255,0,128,.1)',tension:.3,fill:false,borderWidth:3,pointRadius:4,pointBackgroundColor:'#fcd404'},
+      {label:'MA50',data:ma50,borderColor:'#00d4ff',borderWidth:2,pointRadius:0,fill:false,tension:.3},
+      {label:'MA200',data:ma200,borderColor:'#76ff7a',borderWidth:2,pointRadius:0,fill:false,tension:.3,borderDash:[6,3]},
+      {label:'R1 ($268,50 ATH)',data:Array(13).fill(268.5),borderColor:'rgba(239,68,68,.6)',borderDash:[8,4],borderWidth:1,pointRadius:0,fill:false},
+      {label:'S2 ($215 MA200)',data:Array(13).fill(215),borderColor:'rgba(118,255,122,.6)',borderDash:[8,4],borderWidth:1,pointRadius:0,fill:false}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'top',labels:{padding:10,font:{size:11}}},
+      tooltip:{callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.y.toFixed(2)}  (≈ ${(c.parsed.y*FX_USD_EUR).toFixed(2)} €)`}}
+    },
+    scales:{y:{grid:{color:'#3a1f4d'},ticks:{callback:v=>'$'+v}},x:{grid:{display:false}}}
+  }
+});
+</script>
+</body>
+</html>
